@@ -82,6 +82,8 @@
   .wordmark .num {
     color: var(--violet-light);
   }
+  a.wordmark { transition: opacity 0.15s ease; }
+  a.wordmark:hover { opacity: 0.82; }
   .header-tag {
     font-family: 'Inter', sans-serif;
     font-size: 12px;
@@ -355,7 +357,7 @@
 
 <header>
   <div class="header-inner">
-    <div class="wordmark">EXIT<span class="num">239</span></div>
+    <a href="index.html" class="wordmark" aria-label="Exit239 — home">EXIT<span class="num">239</span></a>
     <div class="header-tag">Dispatches from the middle of nowhere</div>
   </div>
 </header>
