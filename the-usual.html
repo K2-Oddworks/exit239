@@ -3,6 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
 <title>The Usual — Exit239</title>
 <meta name="description" content="The diner never mentions what it notices. It just quietly fixes it — every dish, every visit, whether he asked or not.">
 <meta property="og:type" content="article">
@@ -74,8 +75,13 @@
     color: #FAF7F5;
   }
   .wordmark .num { color: var(--violet-light); }
-  a.wordmark { transition: opacity 0.15s ease; }
+  a.wordmark { transition: opacity 0.15s ease; display: inline-flex; align-items: center; gap: 8px; }
   a.wordmark:hover { opacity: 0.82; }
+  .brand-mark { width: 1.5em; height: 1.5em; flex: none; color: var(--violet-light); }
+  @keyframes ex239-flicker { 0%,92%,100%{opacity:1;} 93.5%{opacity:0.15;} 94.5%{opacity:1;} 96%{opacity:0.35;} 97%{opacity:1;} }
+  @keyframes ex239-drift { 0%,78%,100%{transform:translate(0,0);opacity:0.85;} 85%{transform:translate(2px,-1.5px);opacity:0.4;} 90%{transform:translate(0,0);opacity:0.85;} }
+  .ex239-scanline { animation: ex239-flicker 9s ease-in-out infinite; }
+  .ex239-pixel { animation: ex239-drift 6.5s ease-in-out infinite; }
   .back-link {
     font-family: 'Inter', sans-serif;
     font-size: 12px;
@@ -434,7 +440,7 @@
 
 <header>
   <div class="header-inner">
-    <a href="index.html" class="wordmark" aria-label="Exit239 — home">EXIT<span class="num">239</span></a>
+    <a href="index.html" class="wordmark" aria-label="Exit239 — home"><svg class="brand-mark" viewBox="0 0 100 100" aria-hidden="true" focusable="false"><circle cx="50" cy="50" r="42" fill="none" stroke="currentColor" stroke-width="4" stroke-dasharray="14 6"/><circle cx="50" cy="50" r="24" fill="none" stroke="currentColor" stroke-width="6"/><line class="ex239-scanline" x1="12" y1="50" x2="88" y2="50" stroke="currentColor" stroke-width="5"/><rect class="ex239-pixel" x="78" y="18" width="6" height="6" fill="#7DD8A6"/></svg><span class="wordmark-text">EXIT<span class="num">239</span></span></a>
     <a href="index.html" class="back-link">← all dispatches</a>
   </div>
 </header>
@@ -547,7 +553,7 @@
 
 <footer>
   <div class="footer-inner">
-    <div class="footer-mark">🌵 EXIT239</div>
+    <div class="footer-mark"><svg class="brand-mark" viewBox="0 0 100 100" aria-hidden="true" focusable="false"><circle cx="50" cy="50" r="42" fill="none" stroke="currentColor" stroke-width="4" stroke-dasharray="14 6"/><circle cx="50" cy="50" r="24" fill="none" stroke="currentColor" stroke-width="6"/><line class="ex239-scanline" x1="12" y1="50" x2="88" y2="50" stroke="currentColor" stroke-width="5"/><rect class="ex239-pixel" x="78" y="18" width="6" height="6" fill="#7DD8A6"/></svg><span>EXIT239</span></div>
     <div class="footer-tagline">pick a number, not just a vibe</div>
   </div>
 </footer>
