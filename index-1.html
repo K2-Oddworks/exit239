@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Exit239 — Dispatches from the middle of nowhere</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Source+Serif+4:opsz,wght@8..60,400;8..60,500;8..60,600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+
+<style>
+  :root {
+    --violet: #6B4C7A;
+    --violet-deep: #4A3358;
+    --violet-darker: #17131A;
+    --violet-light: #B99FC7;
+    --bg: #FAF7F5;
+    --ink: #1C1620;
+    --ink-body: #2b2330;
+    --ink-dim: #6b6270;
+    --ink-dim-light: #a89aae;
+    --border: #e5dfe2;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--ink);
+    font-family: 'Source Serif 4', serif;
+  }
+
+  a { color: inherit; text-decoration: none; }
+
+  :focus-visible {
+    outline: 2px solid var(--violet);
+    outline-offset: 3px;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    * { animation: none !important; transition: none !important; }
+  }
+
+  /* ===== HEADER ===== */
+  header {
+    background: var(--violet-darker);
+    border-bottom: 3px solid var(--violet);
+    padding: 28px 24px 24px;
+  }
+  .header-inner {
+    max-width: 760px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+  .wordmark {
+    font-family: 'Space Mono', monospace;
+    font-weight: 700;
+    font-size: 20px;
+    letter-spacing: 0.04em;
+    color: #FAF7F5;
+  }
+  .wordmark .num {
+    color: var(--violet-light);
+  }
+  .header-tag {
+    font-family: 'Inter', sans-serif;
+    font-size: 12px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--ink-dim-light);
+  }
+
+  /* ===== HERO ===== */
+  .hero {
+    max-width: 760px;
+    margin: 0 auto;
+    padding: 72px 24px 56px;
+  }
+  .hero-eyebrow {
+    font-family: 'Space Mono', monospace;
+    font-size: 13px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--violet-deep);
+    margin-bottom: 18px;
+  }
+  .hero h1 {
+    font-family: 'Space Mono', monospace;
+    font-weight: 700;
+    font-size: clamp(32px, 6vw, 48px);
+    line-height: 1.15;
+    color: var(--ink);
+    margin-bottom: 24px;
+    max-width: 14ch;
+  }
+  .hero p {
+    font-size: 19px;
+    line-height: 1.7;
+    color: var(--ink-body);
+    max-width: 52ch;
+  }
+
+  /* ===== DISPATCH LIST ===== */
+  .dispatches {
+    max-width: 760px;
+    margin: 0 auto;
+    padding: 0 24px 40px;
+  }
+
+  .dispatch {
+    display: block;
+    border-top: 1px solid var(--border);
+    padding: 40px 0;
+    transition: padding-left 0.15s ease;
+  }
+  .dispatch:last-child {
+    border-bottom: 1px solid var(--border);
+  }
+  .dispatch:hover,
+  .dispatch:focus-visible {
+    padding-left: 12px;
+  }
+  .dispatch-marker {
+    font-family: 'Space Mono', monospace;
+    font-size: 12px;
+    letter-spacing: 0.1em;
+    color: var(--violet);
+    margin-bottom: 14px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .dispatch-marker::before {
+    content: "";
+    display: inline-block;
+    width: 18px;
+    height: 1px;
+    background: var(--violet);
+  }
+  .dispatch-title {
+    font-family: 'Space Mono', monospace;
+    font-weight: 700;
+    font-size: 26px;
+    color: var(--ink);
+    margin-bottom: 12px;
+  }
+  .dispatch-hook {
+    font-size: 17px;
+    line-height: 1.65;
+    color: var(--ink-body);
+    max-width: 56ch;
+    margin-bottom: 14px;
+  }
+  .dispatch-meta {
+    font-family: 'Inter', sans-serif;
+    font-size: 12px;
+    color: var(--ink-dim);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .dispatch-meta .arrow {
+    color: var(--violet);
+    transition: transform 0.15s ease;
+  }
+  .dispatch:hover .arrow,
+  .dispatch:focus-visible .arrow {
+    transform: translateX(4px);
+  }
+
+  /* ===== EMAIL CAPTURE (mid-page) ===== */
+  .capture-inline {
+    max-width: 760px;
+    margin: 0 auto;
+    padding: 8px 24px 64px;
+  }
+  .capture-box {
+    background: #F0E9F2;
+    border: 1px solid #ddc9e2;
+    border-radius: 3px;
+    padding: 32px 28px;
+  }
+  .capture-box h3 {
+    font-family: 'Space Mono', monospace;
+    font-size: 16px;
+    color: var(--violet-deep);
+    margin-bottom: 8px;
+  }
+  .capture-box p {
+    font-family: 'Inter', sans-serif;
+    font-size: 14px;
+    color: var(--ink-dim);
+    margin-bottom: 18px;
+    line-height: 1.6;
+  }
+  .capture-form {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+  .capture-form input[type="email"] {
+    flex: 1;
+    min-width: 200px;
+    font-family: 'Inter', sans-serif;
+    font-size: 14px;
+    padding: 12px 14px;
+    border: 1px solid #ddc9e2;
+    border-radius: 2px;
+    background: #FAF7F5;
+    color: var(--ink);
+  }
+  .capture-form button {
+    font-family: 'Space Mono', monospace;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    padding: 12px 22px;
+    background: var(--violet-deep);
+    color: #FAF7F5;
+    border: none;
+    border-radius: 2px;
+    cursor: pointer;
+    transition: background 0.15s ease;
+  }
+  .capture-form button:hover {
+    background: var(--violet);
+  }
+
+  /* ===== FOOTER ===== */
+  footer {
+    background: var(--violet-darker);
+    border-top: 3px solid var(--violet);
+    padding: 56px 24px 40px;
+  }
+  .footer-inner {
+    max-width: 760px;
+    margin: 0 auto;
+  }
+  .footer-capture h3 {
+    font-family: 'Space Mono', monospace;
+    font-size: 16px;
+    color: #FAF7F5;
+    margin-bottom: 8px;
+  }
+  .footer-capture p {
+    font-family: 'Inter', sans-serif;
+    font-size: 14px;
+    color: var(--ink-dim-light);
+    margin-bottom: 18px;
+    line-height: 1.6;
+    max-width: 46ch;
+  }
+  .footer-form {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin-bottom: 48px;
+  }
+  .footer-form input[type="email"] {
+    flex: 1;
+    min-width: 200px;
+    font-family: 'Inter', sans-serif;
+    font-size: 14px;
+    padding: 12px 14px;
+    border: 1px solid var(--violet-deep);
+    border-radius: 2px;
+    background: #221D26;
+    color: #FAF7F5;
+  }
+  .footer-form input[type="email"]::placeholder {
+    color: var(--ink-dim-light);
+  }
+  .footer-form button {
+    font-family: 'Space Mono', monospace;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    padding: 12px 22px;
+    background: var(--violet);
+    color: #17131A;
+    border: none;
+    border-radius: 2px;
+    cursor: pointer;
+    transition: background 0.15s ease;
+  }
+  .footer-form button:hover {
+    background: var(--violet-light);
+  }
+  .footer-bottom {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 12px;
+    padding-top: 32px;
+    border-top: 1px solid var(--violet-deep);
+  }
+  .footer-mark {
+    font-family: 'Space Mono', monospace;
+    font-size: 13px;
+    color: var(--ink-dim-light);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .footer-tagline {
+    font-family: 'Inter', sans-serif;
+    font-size: 12px;
+    color: var(--ink-dim);
+  }
+
+  @media (max-width: 480px) {
+    .hero { padding: 56px 20px 40px; }
+    .dispatch-title { font-size: 22px; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-inner">
+    <div class="wordmark">EXIT<span class="num">239</span></div>
+    <div class="header-tag">Dispatches from the middle of nowhere</div>
+  </div>
+</header>
+
+<section class="hero">
+  <div class="hero-eyebrow">// mile marker 239, nowhere in particular</div>
+  <h1>Stories from a place that isn't always the same place twice.</h1>
+  <p>Three dispatches so far. No shared characters, no map that holds still, no promise it'll make sense — only that it's true where it counts.</p>
+</section>
+
+<div class="dispatches">
+
+  <a href="two-show-day.html" class="dispatch">
+    <div class="dispatch-marker">EXIT 239 — DISPATCH NO. 01</div>
+    <div class="dispatch-title">Two-Show Day</div>
+    <p class="dispatch-hook">She's the same singer, the same voice, the same six years of practice — at 2pm they tell her to keep dreaming, and at 8pm they can't believe she's real.</p>
+    <div class="dispatch-meta">Read the dispatch <span class="arrow">→</span></div>
+  </a>
+
+  <a href="the-quiet-part.html" class="dispatch">
+    <div class="dispatch-marker">EXIT 239 — DISPATCH NO. 02</div>
+    <div class="dispatch-title">The Quiet Part</div>
+    <p class="dispatch-hook">He moved eleven acres into the middle of nowhere to be left alone. So did fifty thousand other people.</p>
+    <div class="dispatch-meta">Read the dispatch <span class="arrow">→</span></div>
+  </a>
+
+  <a href="the-usual.html" class="dispatch">
+    <div class="dispatch-marker">EXIT 239 — DISPATCH NO. 03</div>
+    <div class="dispatch-title">The Usual</div>
+    <p class="dispatch-hook">The diner's AI staff never mention what they've noticed about his health. They just quietly fix it — every dish, every visit, whether he asked or not.</p>
+    <div class="dispatch-meta">Read the dispatch <span class="arrow">→</span></div>
+  </a>
+
+</div>
+
+<div class="capture-inline">
+  <div class="capture-box">
+    <h3>Get the next dispatch first</h3>
+    <p>New stories land without warning. Leave your email and we'll let you know when the next one turns up.</p>
+    <form class="capture-form" onsubmit="event.preventDefault();">
+      <input type="email" placeholder="you@somewhere.com" required aria-label="Email address">
+      <button type="submit">Subscribe</button>
+    </form>
+  </div>
+</div>
+
+<footer>
+  <div class="footer-inner">
+    <div class="footer-capture">
+      <h3>Never miss an exit</h3>
+      <p>Every new dispatch, straight to your inbox, no more than you'd want.</p>
+      <form class="footer-form" onsubmit="event.preventDefault();">
+        <input type="email" placeholder="you@somewhere.com" required aria-label="Email address">
+        <button type="submit">Subscribe</button>
+      </form>
+    </div>
+    <div class="footer-bottom">
+      <div class="footer-mark">🌵 EXIT239</div>
+      <div class="footer-tagline">pick a number, not just a vibe</div>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>

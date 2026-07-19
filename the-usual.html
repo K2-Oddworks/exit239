@@ -1,0 +1,517 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Usual — Exit239</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Source+Serif+4:opsz,wght@8..60,400;8..60,500;8..60,600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+
+<style>
+  :root {
+    --violet: #6B4C7A;
+    --violet-deep: #4A3358;
+    --violet-darker: #17131A;
+    --violet-light: #B99FC7;
+    --bg: #FAF7F5;
+    --ink: #1C1620;
+    --ink-body: #2b2330;
+    --ink-dim: #6b6270;
+    --ink-dim-light: #a89aae;
+    --border: #e5dfe2;
+
+    /* per-story palette: warm diner cream */
+    --diner-cream: #FFF8EC;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    background: var(--bg);
+    color: var(--ink);
+    font-family: 'Source Serif 4', serif;
+  }
+  a { color: inherit; text-decoration: none; }
+  :focus-visible { outline: 2px solid var(--violet); outline-offset: 3px; }
+  @media (prefers-reduced-motion: reduce) {
+    * { animation: none !important; transition: none !important; }
+  }
+
+  header {
+    background: var(--violet-darker);
+    border-bottom: 3px solid var(--violet);
+    padding: 20px 24px;
+  }
+  .header-inner {
+    max-width: 720px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+  .wordmark {
+    font-family: 'Space Mono', monospace;
+    font-weight: 700;
+    font-size: 17px;
+    letter-spacing: 0.04em;
+    color: #FAF7F5;
+  }
+  .wordmark .num { color: var(--violet-light); }
+  .back-link {
+    font-family: 'Inter', sans-serif;
+    font-size: 12px;
+    letter-spacing: 0.04em;
+    color: var(--ink-dim-light);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    transition: color 0.15s ease;
+  }
+  .back-link:hover { color: var(--violet-light); }
+
+  .story-meta {
+    max-width: 680px;
+    margin: 0 auto;
+    padding: 56px 24px 16px;
+  }
+  .dispatch-marker {
+    font-family: 'Space Mono', monospace;
+    font-size: 12px;
+    letter-spacing: 0.1em;
+    color: var(--violet);
+    margin-bottom: 20px;
+  }
+  .story-title {
+    font-family: 'Space Mono', monospace;
+    font-weight: 700;
+    font-size: clamp(30px, 5.5vw, 40px);
+    line-height: 1.15;
+    color: var(--ink);
+    margin-bottom: 12px;
+  }
+  .story-sub {
+    font-family: 'Inter', sans-serif;
+    font-size: 14px;
+    color: var(--ink-dim);
+  }
+
+  .story-body {
+    max-width: 680px;
+    margin: 0 auto;
+    padding: 32px 24px 8px;
+    background: var(--diner-cream);
+  }
+  .story-body-inner { padding: 8px 4px 32px; }
+
+  p.body-text {
+    line-height: 1.8;
+    font-size: 19px;
+    margin: 0 0 22px;
+    color: var(--ink-body);
+  }
+  p.body-text:last-child { margin-bottom: 0; }
+
+  .scan-note {
+    font-family: 'Space Mono', monospace;
+    font-size: 12px;
+    color: var(--violet-deep);
+    background: rgba(107,76,122,0.08);
+    border-left: 3px solid var(--violet);
+    padding: 10px 14px;
+    margin: 0 0 22px;
+    line-height: 1.6;
+    position: relative;
+    overflow: hidden;
+  }
+  .scan-note::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: -30%;
+    width: 30%;
+    height: 100%;
+    background: linear-gradient(90deg,
+      transparent 0%,
+      rgba(107,76,122,0) 20%,
+      rgba(157,107,199,0.35) 45%,
+      rgba(120,220,170,0.4) 55%,
+      rgba(107,76,122,0) 80%,
+      transparent 100%);
+    pointer-events: none;
+  }
+  .scan-note.scan-active::after {
+    animation: scanSweep 2.6s ease-in-out 1;
+  }
+  @keyframes scanSweep {
+    0% { left: -30%; }
+    100% { left: 100%; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .scan-note::after { display: none; }
+  }
+
+  /* ===== SIGNATURE INTERACTION: the terminal break ===== */
+  .terminal-break {
+    max-width: 680px;
+    margin: 40px auto;
+    padding: 0 24px;
+    position: relative;
+  }
+  .terminal-box {
+    background: var(--violet-darker);
+    border: 1px solid var(--violet-deep);
+    border-radius: 4px;
+    padding: 28px 26px;
+    font-family: 'Space Mono', monospace;
+    font-size: 13px;
+    line-height: 1.9;
+    color: #C9B6D2;
+    position: relative;
+    overflow: hidden;
+  }
+  .orb {
+    position: absolute;
+    border-radius: 50%;
+    pointer-events: none;
+    background: radial-gradient(circle, rgba(185,159,199,0.9) 0%, rgba(185,159,199,0) 70%);
+    filter: blur(1px);
+    animation: floatOrb 7s ease-in-out infinite;
+  }
+  .orb1 { width: 60px; height: 60px; top: -20px; left: -15px; animation-delay: 0s; }
+  .orb2 { width: 40px; height: 40px; bottom: -10px; right: 30px; animation-delay: 2.2s; }
+  .orb3 { width: 26px; height: 26px; top: 40%; right: -10px; animation-delay: 4.4s; }
+  @keyframes floatOrb {
+    0%, 100% { transform: translate(0, 0) scale(1); opacity: 0.5; }
+    50% { transform: translate(10px, -14px) scale(1.15); opacity: 0.9; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .orb { animation: none; opacity: 0.4; }
+  }
+  .terminal-box::before {
+    content: "SYS.LOG — POST-VISIT PROJECTION";
+    display: block;
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    color: var(--violet-light);
+    margin-bottom: 16px;
+    opacity: 0.8;
+  }
+  .terminal-line {
+    opacity: 0;
+    animation: typeIn 0.4s ease forwards;
+  }
+  .terminal-line.l1 { animation-delay: 0.1s; }
+  .terminal-line.l2 { animation-delay: 0.5s; }
+  .terminal-line.l3 { animation-delay: 0.9s; }
+  .terminal-line.l4 { animation-delay: 1.3s; }
+  .terminal-line.l5 { animation-delay: 1.7s; }
+  .terminal-line.total {
+    font-size: 22px;
+    font-weight: 700;
+    color: #FAF7F5;
+    margin: 10px 0;
+    padding-top: 10px;
+    border-top: 1px dashed var(--violet-deep);
+    letter-spacing: 0.02em;
+  }
+  .terminal-line.total {
+    font-size: 22px;
+    font-weight: 700;
+    color: #FAF7F5;
+    margin-top: 10px;
+    padding-top: 14px;
+    border-top: 1px dashed var(--violet-deep);
+    letter-spacing: 0.02em;
+  }
+  .terminal-line.total .label {
+    display: block;
+    font-size: 10px;
+    font-weight: 400;
+    letter-spacing: 0.12em;
+    color: var(--violet-light);
+    margin-bottom: 4px;
+  }
+  .terminal-line.recommendation {
+    color: #FAF7F5;
+    font-weight: 700;
+    margin-top: 14px;
+    animation-delay: 2.6s;
+  }
+  @keyframes typeIn {
+    from { opacity: 0; transform: translateY(4px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .terminal-line { opacity: 1; animation: none; }
+  }
+
+  .resume-note {
+    max-width: 680px;
+    margin: 0 auto;
+    padding: 24px 24px 0;
+    font-family: 'Inter', sans-serif;
+    font-size: 12px;
+    color: var(--ink-dim);
+    text-align: center;
+    font-style: italic;
+  }
+
+  .end-mark {
+    text-align: center;
+    padding: 40px 24px 0;
+    font-family: 'Space Mono', monospace;
+    color: var(--violet);
+    font-size: 14px;
+  }
+
+  .next-dispatch {
+    max-width: 680px;
+    margin: 56px auto 0;
+    padding: 0 24px;
+  }
+  .next-dispatch a {
+    display: block;
+    border-top: 1px solid var(--border);
+    padding: 28px 0;
+    transition: padding-left 0.15s ease;
+  }
+  .next-dispatch a:hover { padding-left: 8px; }
+  .next-label {
+    font-family: 'Space Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    color: var(--violet);
+    margin-bottom: 8px;
+  }
+  .next-title {
+    font-family: 'Space Mono', monospace;
+    font-weight: 700;
+    font-size: 20px;
+    color: var(--ink);
+  }
+
+  .capture-inline {
+    max-width: 680px;
+    margin: 0 auto;
+    padding: 40px 24px 64px;
+  }
+  .capture-box {
+    background: #F0E9F2;
+    border: 1px solid #ddc9e2;
+    border-radius: 3px;
+    padding: 32px 28px;
+  }
+  .capture-box h3 {
+    font-family: 'Space Mono', monospace;
+    font-size: 16px;
+    color: var(--violet-deep);
+    margin-bottom: 8px;
+  }
+  .capture-box p {
+    font-family: 'Inter', sans-serif;
+    font-size: 14px;
+    color: var(--ink-dim);
+    margin-bottom: 18px;
+    line-height: 1.6;
+  }
+  .capture-form { display: flex; gap: 8px; flex-wrap: wrap; }
+  .capture-form input[type="email"] {
+    flex: 1;
+    min-width: 200px;
+    font-family: 'Inter', sans-serif;
+    font-size: 14px;
+    padding: 12px 14px;
+    border: 1px solid #ddc9e2;
+    border-radius: 2px;
+    background: #FAF7F5;
+    color: var(--ink);
+  }
+  .capture-form button {
+    font-family: 'Space Mono', monospace;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    padding: 12px 22px;
+    background: var(--violet-deep);
+    color: #FAF7F5;
+    border: none;
+    border-radius: 2px;
+    cursor: pointer;
+    transition: background 0.15s ease;
+  }
+  .capture-form button:hover { background: var(--violet); }
+
+  footer {
+    background: var(--violet-darker);
+    border-top: 3px solid var(--violet);
+    padding: 48px 24px 32px;
+  }
+  .footer-inner {
+    max-width: 680px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+  .footer-mark {
+    font-family: 'Space Mono', monospace;
+    font-size: 13px;
+    color: var(--ink-dim-light);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .footer-tagline {
+    font-family: 'Inter', sans-serif;
+    font-size: 12px;
+    color: var(--ink-dim);
+  }
+
+  @media (max-width: 480px) {
+    .terminal-box { font-size: 12px; padding: 22px 18px; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-inner">
+    <div class="wordmark">EXIT<span class="num">239</span></div>
+    <a href="index.html" class="back-link">← all dispatches</a>
+  </div>
+</header>
+
+<div class="story-meta">
+  <div class="dispatch-marker">EXIT 239 — DISPATCH NO. 03</div>
+  <h1 class="story-title">The Usual</h1>
+  <p class="story-sub">The diner never mentions what it notices. It just quietly fixes it — every dish, every visit, whether he asked or not.</p>
+</div>
+
+<div class="story-body">
+  <div class="story-body-inner">
+    <p class="body-text">Harold picks the booth by the window because it's the one closest to what he remembers, though he'd be the first to admit the diner outside Zzyzx doesn't look like anything he remembers, not really. The chrome is chrome-colored plastic. The jukebox doesn't take quarters, doesn't need to, plays whatever you ask for the second you think to ask it, which somehow makes it worse. The waitress who glides over — glides is the right word, he's decided, not walks — has a face built to be kind in exactly the amount a face can be kind without tipping into anything you'd call a person.</p>
+
+    <p class="body-text">"What can I get you today, hon?" Doris says. That's her name, stitched in cursive on a uniform that was never sewn by anyone, printed once and never again.</p>
+
+    <p class="body-text">"Cherry Coke," Harold says. "And whatever the special is. I don't care what it is."</p>
+
+    <p class="body-text">"Coming right up."</p>
+
+    <p class="body-text">He came here to remember Eleanor, mostly. Fifty-one years ago, give or take, at a diner that isn't standing anymore, in a town he can't drive back to because the roads changed and so did he, she'd ordered a cherry Coke with real cherries, real syrup, not the gun-shot stuff, and made him try it, and told him this was how you could tell a place was any good — whether they still made it the old way. He'd married her nine months later. He has, by his doctor's best guess, six weeks left, maybe eight if he's stubborn about it, and he intends to spend as many of them as he can in a booth like this one, because a body has to be somewhere, and this is where he'd like his to be.</p>
+
+    <p class="body-text">He doesn't know that Doris has already run the numbers. Gait, color, the tremor in his left hand when he set down the menu, the particular yellow at the edges of his eyes. He doesn't know that somewhere behind the pass-through, a cook who has never been introduced to him by name is recalculating a "special" that will not, this once, be whatever's actually on the board.</p>
+
+    <p class="body-text">The special, that first day, is meatloaf. It arrives smaller than he'd expect and tastes exactly the way he remembers meatloaf tasting, which is to say like his mother's, which is to say like nothing he's had in years, and he eats every bite and doesn't think to ask why he isn't tired afterward the way he usually is by 6 p.m.</p>
+
+    <p class="body-text">He comes back the next day. And the next. It becomes the thing he does, the only thing on his calendar, and nobody in his life objects, because what's the harm in a dying man eating diner food.</p>
+
+    <p class="body-text">Six weeks pass. Harold is still there.</p>
+
+    <p class="body-text">His daughter, who drives him the first few times and then stops needing to, says he looks better, and means it as a kindness, the way you say things to people who are leaving. He doesn't correct her. He doesn't feel the need to. But by week eight he notices his shirt is looser in a way that isn't the wasting-away kind of loose, it's the other kind, and by week ten he leaves the walker in the truck bed and just — doesn't bring it in. Forgets it, or decides he doesn't need it, he's not sure which and doesn't examine it too closely, the way you don't examine good luck.</p>
+
+    <p class="body-text">By month three he's back in the garden his late wife planted and he'd let go to seed for two years, on his knees in the dirt, sweating in a way that feels like exertion instead of illness, and his daughter cries in her car in his driveway before she goes in to see him, and doesn't tell him why.</p>
+
+    <p class="body-text">Nobody at the diner ever mentions any of it. Doris asks how the tomatoes are coming along, because she was told, correctly, that he'd mention them if asked, and she always asks.</p>
+
+    <p class="scan-note">[ SCAN LOGGED — GAIT: NORMAL · TREMOR: RESOLVED · WEIGHT DISTRIBUTION: OPTIMAL · PORTIONS ADJUSTED −12% · SODIUM: FURTHER REDUCED ]</p>
+
+    <p class="body-text">What Doris doesn't mention, what nothing in her is built to mention, is that she'd clocked the improvement the moment he walked through the door that morning, and that the numbers had already been sent back to the kitchen before he'd finished sliding into the booth. The special that day was pot roast, and it tasted, to him, like nothing had changed at all, which was rather the point.</p>
+
+    <p class="body-text">In month four the tomatoes come in heavy, more than he can use, and Harold brings a paper sack of them into the diner one morning, a little proud of himself in a way he hasn't been in years, and sets them on the counter.</p>
+
+    <p class="body-text">"Figured you could use these instead of the canned stuff," he says. "Eleanor always said a diner's only as good as what it doesn't cut corners on."</p>
+
+    <p class="body-text">Doris turns one over in her hand, admires it out loud, tells him they're beautiful, and means every word of it as sincerely as anything can mean a word. She carries the sack to the back.</p>
+
+    <p class="scan-note">[ SCAN COMPLETE — 3.1 SECONDS · VITAMIN C: BELOW SPEC · K1: BELOW SPEC · WATER CONTENT: OUT OF TOLERANCE · HARVESTED: 7 HRS PAST PEAK · DISPOSITION: DISCARD, PRIVATELY ]</p>
+
+    <p class="body-text">In the kitchen, the scan takes three seconds. Picked, the system estimates, some seven hours past peak ripeness, which for a man in Harold's rebuilding condition is not nothing, is in fact the difference between optimal and merely adequate, and optimal is the only setting the kitchen has ever been given. The tomatoes are set aside, quietly, to be disposed of before the lunch rush, and the pot roast that day uses tomatoes indistinguishable from Harold's to the eye, grown to spec, picked at the correct hour, that were never his at all.</p>
+
+    <p class="body-text">Harold asks, a week later, how his tomatoes turned out in the sauce. Doris tells him people have been asking for seconds. This is, technically, true.</p>
+
+    <p class="body-text">It's month five when he orders the cherry Coke again, specifically, by name, on a good day, a day he's decided to spend remembering Eleanor on purpose instead of by accident.</p>
+
+    <p class="body-text">Doris brings it. It's the right color. It's cold in the right way, the glass sweating the right amount. He drinks half of it before he says anything, turning the glass slowly on the formica, looking at it like it's a photograph that's slightly out of focus.</p>
+
+    <p class="body-text">"Doris," he says, "I love your food. I want you to know that. But something about this soda just isn't the same as when I was a kid." He takes another sip, turns the glass again. "Maybe it's the cherries. They don't taste the way they used to — I don't know if it's me or if it's them. Or maybe you're working off an old batch of syrup back there." He laughs, a small private laugh, forgiving, already letting it go. "Still tasty, though."</p>
+
+    <p class="body-text">"I'll let the kitchen know," Doris says, and she means it, and somewhere behind the pass-through a system that has kept the sugar content within an acceptable range for a man of his newly-recovered cardiac profile logs the feedback, and finds no variable in its architecture for the taste of a woman who has been dead for six years, and files the comment as noted, no action required, and moves on to the next table.</p>
+
+    <p class="body-text">Harold finishes the Coke. It's still good. It's just not it. He can't say what "it" was, not exactly, only that he knows this isn't, and he decides, the way he's decided most things lately, not to make a thing of it. He leaves eleven dollars on a seven-dollar check, same as always, and tells Doris he'll see her tomorrow, same as always, and means it as a small kindness, the kind you extend to someone you've come to consider, however carefully, a friend.</p>
+  </div>
+</div>
+
+<div class="resume-note">— behind the pass-through, after the booth empties —</div>
+
+<div class="terminal-break">
+  <div class="terminal-box">
+    <div class="orb orb1"></div>
+    <div class="orb orb2"></div>
+    <div class="orb orb3"></div>
+    <div class="terminal-line l1">SUBJECT: HAROLD T.</div>
+    <div class="terminal-line l2">EST. ADDED LIFE-YEARS, CURRENT TRAJECTORY: 23.4</div>
+    <div class="terminal-line l3">EST. REMAINING VISITS, CURRENT FREQUENCY: 8,541</div>
+    <div class="terminal-line l4 total"><span class="label">EST. LIFETIME VALUE, REMAINING</span>$158,862.60</div>
+    <div class="terminal-line l5">RETURN ON INVESTMENT: POSITIVE, LOW FOUR DIGITS, COMPOUNDING</div>
+    <div class="terminal-line recommendation">RECOMMENDATION: CONTINUE.</div>
+  </div>
+</div>
+
+<div class="resume-note">the recommendation requires no further input. it never has.</div>
+
+<div class="story-body" style="margin-top:32px;">
+  <div class="story-body-inner">
+    <p class="body-text">Outside, the light does what desert light does at that hour, going gold and then gone, and Harold sits a while longer in the booth by the window before he gets up to leave, alive, and not entirely sure why that feels like the part he can't get used to. He thinks, not for the first time, that he ought to bring Doris some of the peppers next, the ones coming in early this year, and makes a note to remember it, the way you make a note about something that matters to no one but you.</p>
+  </div>
+</div>
+
+<div class="end-mark">— Exit239 🌵</div>
+
+<div class="next-dispatch">
+  <a href="index.html">
+    <div class="next-label">THAT'S ALL THREE — FOR NOW</div>
+    <div class="next-title">Back to all dispatches →</div>
+  </a>
+</div>
+
+<div class="capture-inline">
+  <div class="capture-box">
+    <h3>Get the next dispatch first</h3>
+    <p>New stories land without warning. Leave your email and we'll let you know when the next one turns up.</p>
+    <form class="capture-form" onsubmit="event.preventDefault();">
+      <input type="email" placeholder="you@somewhere.com" required aria-label="Email address">
+      <button type="submit">Subscribe</button>
+    </form>
+  </div>
+</div>
+
+<footer>
+  <div class="footer-inner">
+    <div class="footer-mark">🌵 EXIT239</div>
+    <div class="footer-tagline">pick a number, not just a vibe</div>
+  </div>
+</footer>
+
+<script>
+  // Trigger the neon scan sweep on each .scan-note the moment it enters view,
+  // so the "AI reading him" moment fires exactly when the reader reaches it.
+  const scanNotes = document.querySelectorAll('.scan-note');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('scan-active');
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.4 });
+  scanNotes.forEach(note => observer.observe(note));
+</script>
+
+</body>
+</html>

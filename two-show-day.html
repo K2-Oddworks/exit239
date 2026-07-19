@@ -1,0 +1,501 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Two-Show Day — Exit239</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Source+Serif+4:opsz,wght@8..60,400;8..60,500;8..60,600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+
+<style>
+  :root {
+    --violet: #6B4C7A;
+    --violet-deep: #4A3358;
+    --violet-darker: #17131A;
+    --violet-light: #B99FC7;
+    --bg: #FAF7F5;
+    --ink: #1C1620;
+    --ink-body: #2b2330;
+    --ink-dim: #6b6270;
+    --ink-dim-light: #a89aae;
+    --border: #e5dfe2;
+
+    /* per-story palette: warm stage-light amber vs cool lounge blue */
+    --afternoon: #4a5568;
+    --afternoon-bg: #eef0f3;
+    --night: #8a5a2e;
+    --night-bg: #faf1e2;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    background: var(--bg);
+    color: var(--ink);
+    font-family: 'Source Serif 4', serif;
+  }
+  a { color: inherit; text-decoration: none; }
+  :focus-visible { outline: 2px solid var(--violet); outline-offset: 3px; }
+  @media (prefers-reduced-motion: reduce) {
+    * { animation: none !important; transition: none !important; }
+  }
+
+  /* ===== HEADER (locked chrome) ===== */
+  header {
+    background: var(--violet-darker);
+    border-bottom: 3px solid var(--violet);
+    padding: 20px 24px;
+  }
+  .header-inner {
+    max-width: 720px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+  .wordmark {
+    font-family: 'Space Mono', monospace;
+    font-weight: 700;
+    font-size: 17px;
+    letter-spacing: 0.04em;
+    color: #FAF7F5;
+  }
+  .wordmark .num { color: var(--violet-light); }
+  .back-link {
+    font-family: 'Inter', sans-serif;
+    font-size: 12px;
+    letter-spacing: 0.04em;
+    color: var(--ink-dim-light);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    transition: color 0.15s ease;
+  }
+  .back-link:hover { color: var(--violet-light); }
+
+  /* ===== STORY META ===== */
+  .story-meta {
+    max-width: 680px;
+    margin: 0 auto;
+    padding: 56px 24px 16px;
+  }
+  .dispatch-marker {
+    font-family: 'Space Mono', monospace;
+    font-size: 12px;
+    letter-spacing: 0.1em;
+    color: var(--violet);
+    margin-bottom: 20px;
+  }
+  .story-title {
+    font-family: 'Space Mono', monospace;
+    font-weight: 700;
+    font-size: clamp(30px, 5.5vw, 40px);
+    line-height: 1.15;
+    color: var(--ink);
+    margin-bottom: 12px;
+  }
+  .story-sub {
+    font-family: 'Inter', sans-serif;
+    font-size: 14px;
+    color: var(--ink-dim);
+  }
+
+  /* ===== SIGNATURE INTERACTION: afternoon/night toggle ===== */
+  .toggle-intro {
+    max-width: 680px;
+    margin: 0 auto;
+    padding: 32px 24px 8px;
+    font-family: 'Inter', sans-serif;
+    font-size: 13px;
+    color: var(--ink-dim);
+    line-height: 1.6;
+  }
+  .toggle-wrap {
+    max-width: 680px;
+    margin: 0 auto;
+    padding: 16px 24px 40px;
+  }
+  .toggle {
+    display: inline-flex;
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    padding: 4px;
+    background: #fff;
+    gap: 4px;
+  }
+  .toggle button {
+    font-family: 'Space Mono', monospace;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.03em;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 999px;
+    background: transparent;
+    color: var(--ink-dim);
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+  .toggle button.active.afternoon-active {
+    background: var(--afternoon);
+    color: #fff;
+  }
+  .toggle button.active.night-active {
+    background: var(--night);
+    color: #fff;
+  }
+
+  /* ===== STORY BODY ===== */
+  .story-body {
+    max-width: 680px;
+    margin: 0 auto;
+    padding: 0 24px 24px;
+    transition: background 0.3s ease;
+    border-radius: 4px;
+  }
+  .story-body.afternoon-active { background: var(--afternoon-bg); }
+  .story-body.night-active { background: var(--night-bg); }
+
+  .story-body-inner { padding: 32px 28px; }
+
+  p.body-text {
+    line-height: 1.8;
+    font-size: 19px;
+    margin: 0 0 22px;
+    color: var(--ink-body);
+  }
+  p.body-text:last-child { margin-bottom: 0; }
+  .section-divider {
+    text-align: center;
+    color: var(--ink-dim);
+    margin: 8px 0 32px;
+    font-size: 14px;
+  }
+  .shared-section p.body-text {
+    max-width: none;
+  }
+
+  .switch-prompt {
+    max-width: 680px;
+    margin: 0 auto;
+    padding: 8px 24px 40px;
+  }
+  .switch-prompt-inner {
+    border: 1px dashed var(--border);
+    border-radius: 4px;
+    padding: 20px 24px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 12px;
+    background: #fff;
+  }
+  .switch-prompt-text {
+    font-family: 'Inter', sans-serif;
+    font-size: 14px;
+    color: var(--ink-dim);
+    line-height: 1.5;
+  }
+  .switch-prompt button {
+    font-family: 'Space Mono', monospace;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.03em;
+    padding: 10px 18px;
+    border: none;
+    border-radius: 999px;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: opacity 0.15s ease;
+  }
+  .switch-prompt button:hover { opacity: 0.85; }
+  #switch-to-night { background: var(--night); color: #fff; }
+  #switch-to-afternoon { background: var(--afternoon); color: #fff; }
+
+  .end-mark {
+    text-align: center;
+    padding: 40px 24px 0;
+    font-family: 'Space Mono', monospace;
+    color: var(--violet);
+    font-size: 14px;
+  }
+
+  .next-dispatch {
+    max-width: 680px;
+    margin: 56px auto 0;
+    padding: 0 24px;
+  }
+  .next-dispatch a {
+    display: block;
+    border-top: 1px solid var(--border);
+    padding: 28px 0;
+    transition: padding-left 0.15s ease;
+  }
+  .next-dispatch a:hover { padding-left: 8px; }
+  .next-label {
+    font-family: 'Space Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    color: var(--violet);
+    margin-bottom: 8px;
+  }
+  .next-title {
+    font-family: 'Space Mono', monospace;
+    font-weight: 700;
+    font-size: 20px;
+    color: var(--ink);
+  }
+
+  /* ===== EMAIL CAPTURE ===== */
+  .capture-inline {
+    max-width: 680px;
+    margin: 0 auto;
+    padding: 40px 24px 64px;
+  }
+  .capture-box {
+    background: #F0E9F2;
+    border: 1px solid #ddc9e2;
+    border-radius: 3px;
+    padding: 32px 28px;
+  }
+  .capture-box h3 {
+    font-family: 'Space Mono', monospace;
+    font-size: 16px;
+    color: var(--violet-deep);
+    margin-bottom: 8px;
+  }
+  .capture-box p {
+    font-family: 'Inter', sans-serif;
+    font-size: 14px;
+    color: var(--ink-dim);
+    margin-bottom: 18px;
+    line-height: 1.6;
+  }
+  .capture-form { display: flex; gap: 8px; flex-wrap: wrap; }
+  .capture-form input[type="email"] {
+    flex: 1;
+    min-width: 200px;
+    font-family: 'Inter', sans-serif;
+    font-size: 14px;
+    padding: 12px 14px;
+    border: 1px solid #ddc9e2;
+    border-radius: 2px;
+    background: #FAF7F5;
+    color: var(--ink);
+  }
+  .capture-form button {
+    font-family: 'Space Mono', monospace;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    padding: 12px 22px;
+    background: var(--violet-deep);
+    color: #FAF7F5;
+    border: none;
+    border-radius: 2px;
+    cursor: pointer;
+    transition: background 0.15s ease;
+  }
+  .capture-form button:hover { background: var(--violet); }
+
+  /* ===== FOOTER (locked chrome) ===== */
+  footer {
+    background: var(--violet-darker);
+    border-top: 3px solid var(--violet);
+    padding: 48px 24px 32px;
+  }
+  .footer-inner {
+    max-width: 680px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+  .footer-mark {
+    font-family: 'Space Mono', monospace;
+    font-size: 13px;
+    color: var(--ink-dim-light);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .footer-tagline {
+    font-family: 'Inter', sans-serif;
+    font-size: 12px;
+    color: var(--ink-dim);
+  }
+
+  @media (max-width: 480px) {
+    .story-body-inner { padding: 24px 20px; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-inner">
+    <div class="wordmark">EXIT<span class="num">239</span></div>
+    <a href="index.html" class="back-link">← all dispatches</a>
+  </div>
+</header>
+
+<div class="story-meta">
+  <div class="dispatch-marker">EXIT 239 — DISPATCH NO. 01</div>
+  <h1 class="story-title">Two-Show Day</h1>
+  <p class="story-sub">Same voice. Same skill. Same six years of practice. Different room, different price of admission.</p>
+</div>
+
+<p class="toggle-intro">She plays two rooms today — a hundred-and-ten-seat lounge in the afternoon, an eighteen-hundred-seat theater at night. Pick a room to start in.</p>
+
+<div class="toggle-wrap">
+  <div class="toggle">
+    <button id="btn-afternoon" class="active afternoon-active" onclick="showRoom('afternoon')">2:00 PM — THE LOUNGE</button>
+    <button id="btn-night" onclick="showRoom('night')">8:00 PM — THE THEATER</button>
+  </div>
+</div>
+
+<div id="body-afternoon" class="story-body afternoon-active">
+  <div class="story-body-inner">
+    <p class="body-text">The Cactus Rose Lounge seats about a hundred and ten if the fire marshal isn't looking, and at 2 p.m. on a Tuesday it holds maybe forty. The carpet is the color of a bruise. The air conditioning hums a half-step below the key of everything Dana sings, which she noticed her second week and has been unable to un-hear for six years.</p>
+
+    <p class="body-text">She opens with "Fever," because the afternoon crowd wants songs they already own. A man near the front is eating a shrimp cocktail out of a plastic cup shaped like a smaller plastic cup. Two women in matching visors are splitting a daiquiri and talking through the first verse, the second verse, and most of the bridge. A slot machine in the doorway makes its noise, which is the noise of coins that no longer exist.</p>
+
+    <p class="body-text">Dana is good. This is not in question, and it is also not the point. She hits the note at the end of "At Last" that most lounge singers slide around, and she hits it clean, and one table applauds and one man raises his beer at her the way you'd wave at a neighbor whose name you can't remember.</p>
+
+    <p class="body-text">After the set, the shrimp cocktail man catches her by the little rope that separates the stage from the casino floor. He is sunburned in the pattern of a man who fell asleep in one specific chair.</p>
+
+    <p class="body-text">"Hey, not bad," he says. "Not bad at all. You've got a real voice on you."</p>
+
+    <p class="body-text">"Thank you."</p>
+
+    <p class="body-text">"You keep at it." He points at her with the cocktail fork, warmly, the way people point when they're giving you something. "Keep grinding. I'm serious. You keep working like that, maybe one day you'll be in one of the big shows. The real ones. Down at the—" he gestures at the Strip in general, at all of it. "You never know."</p>
+
+    <p class="body-text">"You never know," Dana agrees.</p>
+
+    <p class="body-text">He seems pleased with the exchange. He has done a kindness. He will remember it on the plane home, briefly, as evidence of the kind of person he is.</p>
+
+    <p class="body-text">Dana clocks out at 3:40. Her call time at the Meridian Theater is 6:00.</p>
+  </div>
+</div>
+
+<div id="switch-from-afternoon" class="switch-prompt">
+  <div class="switch-prompt-inner">
+    <div class="switch-prompt-text">You've read the 2 PM room. Before you keep going —</div>
+    <button id="switch-to-night" onclick="showRoom('night', true)">SEE THE 8 PM ROOM →</button>
+  </div>
+</div>
+
+<div id="body-night" class="story-body night-active" style="display:none;">
+  <div class="story-body-inner">
+    <p class="body-text">The Meridian seats eighteen hundred, and tonight it holds eighteen hundred. The production is called VELOCITY, all caps, and it has been running for eleven years, which in this city makes it approximately a cathedral. There are aerialists. There is a moment involving four thousand gallons of water that the fire marshal <em>has</em> looked at, extensively, and signed off on with visible reluctance. Dana is one of three featured vocalists, and she is the one who sings the second-act number where the woman rises out of the flood on a platform shaped like a broken clock, and eighteen hundred people forget to breathe.</p>
+
+    <p class="body-text">Tonight she hits the note — the same note, if anyone's keeping track, the one at the end of "At Last," the same muscle, the same six years of the same air conditioning hum — and the room comes apart. Standing ovation before the song is over. A woman in the third row is crying and filming herself crying.</p>
+
+    <p class="body-text">After the show, Dana does the meet-and-greet in the corridor with the framed photos of everyone famous who ever sat through VELOCITY. A couple from Ohio waits through the whole line to talk to her. The husband does the talking. The wife holds his elbow like a handrail.</p>
+
+    <p class="body-text">"That was the most incredible thing I have ever seen in my life," he says. "I mean that. The most incredible. That song — I don't even know what to say."</p>
+
+    <p class="body-text">"Thank you so much."</p>
+
+    <p class="body-text">"I'll tell you what." He leans in slightly, confidential, a man about to be honest. "I can't believe people come to this town and go to those little lounge acts. The garbage ones, you know, with the — the carpet." He laughs. "When <em>this</em> is here. When you can see <em>this</em>. It's a crime, honestly."</p>
+
+    <p class="body-text">"Honestly," Dana says.</p>
+
+    <p class="body-text">"You are the real thing," the man says, and he means it, and it is the nicest thing anyone will say to her all week, and it was also said to her at 3:15 this afternoon by a man holding a shrimp fork, in different words, about a different woman, who does not exist.</p>
+
+    <p class="body-text">The wife asks for a photo. Dana smiles for it. She has a good smile for photos; it's the same one both shows use.</p>
+  </div>
+</div>
+
+<div id="switch-from-night" class="switch-prompt" style="display:none;">
+  <div class="switch-prompt-inner">
+    <div class="switch-prompt-text">You've read the 8 PM room. Before you keep going —</div>
+    <button id="switch-to-afternoon" onclick="showRoom('afternoon', true)">SEE THE 2 PM ROOM →</button>
+  </div>
+</div>
+
+<div class="shared-wrap shared-section">
+  <p class="body-text">Employee parking at the Meridian is a structure two blocks off the Strip, level four, under a light that has been dying with great patience since March. Dana's car is a 2009 Camry the color of weak coffee, which her grandmother gave her three years ago because — and this was said out loud, at Thanksgiving, over pie — she "hated to think of her taking the bus after everything she's been through."</p>
+
+  <p class="body-text">The Camry is where she left it. There is a boot on the front driver's-side wheel.</p>
+
+  <p class="body-text">Dana stands there for a second with her bag on her shoulder. The bag has her lounge dress in it, and her show makeup, and a granola bar she meant to eat at 4:00.</p>
+
+  <p class="body-text">She does not kick the boot. She does not call anyone at the city, because the city closes at 5:00 and reopens at 8:00 and she will be asleep at 8:00 because there is a 2 p.m. tomorrow, and a 7:30 after that. She reads the orange sticker on the window all the way through, once, the way you read something you've read before to confirm it hasn't improved.</p>
+
+  <p class="body-text">Then she calls home.</p>
+
+  <p class="body-text">"Hey. No, everything's fine. Show was great — sold out again, they were on their feet, it was —" she shifts the bag to the other shoulder. "Yeah. Yeah, second act. Anyway, I'm gonna be late, there's a boot on the car again, so I gotta figure that out. No — no, don't come, it's fine, I'll deal with it. Okay. Okay. Love ya."</p>
+
+  <p class="body-text">She hangs up, and looks at the boot, and eats the granola bar, because it's there, and so is she.</p>
+
+  <p class="body-text">Level four is quiet. Two blocks away, eighteen hundred people are streaming out onto the Strip telling each other they've never seen anything like her. They're right. They haven't. Almost nobody has, twice.</p>
+</div>
+
+<div class="end-mark">— Exit239 🌵</div>
+
+<div class="next-dispatch">
+  <a href="the-quiet-part.html">
+    <div class="next-label">NEXT — EXIT 239, DISPATCH NO. 02</div>
+    <div class="next-title">The Quiet Part →</div>
+  </a>
+</div>
+
+<div class="capture-inline">
+  <div class="capture-box">
+    <h3>Get the next dispatch first</h3>
+    <p>New stories land without warning. Leave your email and we'll let you know when the next one turns up.</p>
+    <form class="capture-form" onsubmit="event.preventDefault();">
+      <input type="email" placeholder="you@somewhere.com" required aria-label="Email address">
+      <button type="submit">Subscribe</button>
+    </form>
+  </div>
+</div>
+
+<footer>
+  <div class="footer-inner">
+    <div class="footer-mark">🌵 EXIT239</div>
+    <div class="footer-tagline">pick a number, not just a vibe</div>
+  </div>
+</footer>
+
+<script>
+  function showRoom(room, scrollBack) {
+    const btnAfternoon = document.getElementById('btn-afternoon');
+    const btnNight = document.getElementById('btn-night');
+    const bodyAfternoon = document.getElementById('body-afternoon');
+    const bodyNight = document.getElementById('body-night');
+    const switchFromAfternoon = document.getElementById('switch-from-afternoon');
+    const switchFromNight = document.getElementById('switch-from-night');
+
+    if (room === 'afternoon') {
+      btnAfternoon.classList.add('active', 'afternoon-active');
+      btnNight.classList.remove('active', 'night-active');
+      bodyAfternoon.style.display = 'block';
+      bodyNight.style.display = 'none';
+      switchFromAfternoon.style.display = 'block';
+      switchFromNight.style.display = 'none';
+    } else {
+      btnNight.classList.add('active', 'night-active');
+      btnAfternoon.classList.remove('active', 'afternoon-active');
+      bodyNight.style.display = 'block';
+      bodyAfternoon.style.display = 'none';
+      switchFromNight.style.display = 'block';
+      switchFromAfternoon.style.display = 'none';
+    }
+
+    if (scrollBack) {
+      document.getElementById('body-' + room).scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  }
+</script>
+
+</body>
+</html>
