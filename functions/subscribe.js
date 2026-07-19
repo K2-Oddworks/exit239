@@ -32,8 +32,10 @@ export async function onRequestPost({ request, env }) {
   if (!apiKey) return json({ error: 'not configured' }, 500);
 
   const payload = { email, updateEnabled: true };
-  if (env.BREVO_LIST_ID) {
-    const ids = String(env.BREVO_LIST_ID)
+  // Defaults to list 5; override with BREVO_LIST_ID (numeric, comma-separated).
+  const listSource = env.BREVO_LIST_ID || '5';
+  if (listSource) {
+    const ids = String(listSource)
       .split(',')
       .map((s) => parseInt(s.trim(), 10))
       .filter((n) => !isNaN(n));
