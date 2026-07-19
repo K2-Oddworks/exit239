@@ -10,14 +10,14 @@
 <meta property="og:title" content="Exit239 — Dispatches from the middle of nowhere">
 <meta property="og:description" content="Three dispatches so far. No shared characters, no map that holds still — only that it's true where it counts.">
 <meta property="og:url" content="https://exit239.pages.dev/">
-<meta property="og:image" content="https://exit239.pages.dev/og-index.png">
+<meta property="og:image" content="https://exit239.pages.dev/og-index.jpg">
 <meta property="og:image:width" content="2400">
 <meta property="og:image:height" content="1260">
 <meta property="og:image:alt" content="Exit239 — Stories from a place that is never the same place twice.">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="Exit239 — Dispatches from the middle of nowhere">
 <meta name="twitter:description" content="Three dispatches so far. No shared characters, no map that holds still — only that it's true where it counts.">
-<meta name="twitter:image" content="https://exit239.pages.dev/og-index.png">
+<meta name="twitter:image" content="https://exit239.pages.dev/og-index.jpg">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Source+Serif+4:opsz,wght@8..60,400;8..60,500;8..60,600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
@@ -92,11 +92,26 @@
     color: var(--ink-dim-light);
   }
 
+  /* ===== HOMEPAGE HERO BANNER ===== */
+  .home-hero-band {
+    background: #17131A url('index-hero.jpg') center 44% / cover no-repeat;
+    border-bottom: 3px solid var(--violet);
+    min-height: clamp(200px, 32vw, 360px);
+    position: relative;
+  }
+  .home-hero-band::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(0deg, rgba(23,19,26,0.32) 0%, rgba(23,19,26,0) 42%);
+    pointer-events: none;
+  }
+
   /* ===== HERO ===== */
   .hero {
     max-width: 760px;
     margin: 0 auto;
-    padding: 72px 24px 56px;
+    padding: 52px 24px 56px;
   }
   .hero-eyebrow {
     font-family: 'Space Mono', monospace;
@@ -361,6 +376,8 @@
     <div class="header-tag">Dispatches from the middle of nowhere</div>
   </div>
 </header>
+
+<div class="home-hero-band" role="img" aria-label="Exit 239 — Zzyzx Road: an empty desert highway at dusk under a violet sky"></div>
 
 <section class="hero">
   <div class="hero-eyebrow">// mile marker 239, nowhere in particular</div>
