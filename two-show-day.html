@@ -10,14 +10,14 @@
 <meta property="og:title" content="Two-Show Day — Exit239">
 <meta property="og:description" content="Same voice. Same skill. Same six years of practice. Different room, different price of admission.">
 <meta property="og:url" content="https://exit239.pages.dev/two-show-day.html">
-<meta property="og:image" content="https://exit239.pages.dev/og-two-show-day.png">
+<meta property="og:image" content="https://exit239.pages.dev/og-two-show-day.jpg">
 <meta property="og:image:width" content="2400">
 <meta property="og:image:height" content="1260">
 <meta property="og:image:alt" content="Exit 239 — Dispatch No. 01: Two-Show Day">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="Two-Show Day — Exit239">
 <meta name="twitter:description" content="Same voice. Same skill. Same six years of practice. Different room, different price of admission.">
-<meta name="twitter:image" content="https://exit239.pages.dev/og-two-show-day.png">
+<meta name="twitter:image" content="https://exit239.pages.dev/og-two-show-day.jpg">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Source+Serif+4:opsz,wght@8..60,400;8..60,500;8..60,600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
@@ -117,6 +117,42 @@
     font-family: 'Inter', sans-serif;
     font-size: 14px;
     color: var(--ink-dim);
+  }
+
+  /* ===== HERO IMAGE BAND ===== */
+  .story-hero {
+    position: relative;
+    background: #17131A url('two-show-day-hero.jpg') center 42% / cover no-repeat;
+    border-bottom: 3px solid var(--violet);
+    min-height: clamp(300px, 44vw, 460px);
+    display: flex;
+    align-items: flex-end;
+  }
+  .story-hero::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background:
+      linear-gradient(90deg, rgba(23,19,26,0.90) 0%, rgba(23,19,26,0.52) 40%, rgba(23,19,26,0.08) 68%, rgba(23,19,26,0.30) 100%),
+      linear-gradient(0deg, rgba(23,19,26,0.92) 0%, rgba(23,19,26,0.28) 44%, rgba(23,19,26,0) 72%);
+    pointer-events: none;
+  }
+  .story-hero-inner {
+    position: relative;
+    z-index: 1;
+    max-width: 680px;
+    width: 100%;
+    margin: 0 auto;
+    padding: 40px 24px 30px;
+  }
+  .story-hero .dispatch-marker { color: var(--violet-light); }
+  .story-hero .story-title {
+    color: #FAF7F5;
+    text-shadow: 0 2px 18px rgba(0,0,0,0.55);
+  }
+  .story-hero .story-sub {
+    color: #C9B6D2;
+    text-shadow: 0 1px 10px rgba(0,0,0,0.5);
   }
 
   /* ===== SIGNATURE INTERACTION: afternoon/night toggle ===== */
@@ -362,11 +398,13 @@
   </div>
 </header>
 
-<div class="story-meta">
-  <div class="dispatch-marker">EXIT 239 — DISPATCH NO. 01</div>
-  <h1 class="story-title">Two-Show Day</h1>
-  <p class="story-sub">Same voice. Same skill. Same six years of practice. Different room, different price of admission.</p>
-</div>
+<section class="story-hero">
+  <div class="story-hero-inner">
+    <div class="dispatch-marker">EXIT 239 — DISPATCH NO. 01</div>
+    <h1 class="story-title">Two-Show Day</h1>
+    <p class="story-sub">Same voice. Same skill. Same six years of practice. Different room, different price of admission.</p>
+  </div>
+</section>
 
 <p class="toggle-intro">She plays two rooms today — a hundred-and-ten-seat lounge in the afternoon, an eighteen-hundred-seat theater at night. Pick a room to start in.</p>
 
