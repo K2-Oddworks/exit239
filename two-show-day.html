@@ -393,6 +393,29 @@
   @media (max-width: 480px) {
     .story-body-inner { padding: 24px 20px; }
   }
+
+  /* ===== EMAIL CAPTURE FEEDBACK ===== */
+  .form-note {
+    font-family: 'Space Mono', monospace;
+    font-size: 14px;
+    line-height: 1.5;
+    color: var(--violet-deep);
+    padding: 4px 0;
+  }
+  .form-error {
+    font-family: 'Inter', sans-serif;
+    font-size: 13px;
+    color: #b8557a;
+    margin-top: 10px;
+  }
+  .footer-capture .form-note { color: #FAF7F5; }
+  .footer-capture .form-error { color: #e6a3bd; }
+  .hp-field {
+    position: absolute !important;
+    left: -9999px !important;
+    width: 1px; height: 1px;
+    opacity: 0; overflow: hidden;
+  }
 </style>
 </head>
 <body>
@@ -557,5 +580,73 @@
   }
 </script>
 
+
+<script>
+(function () {
+  var forms = document.querySelectorAll('.capture-form, .footer-form');
+  Array.prototype.forEach.call(forms, function (form) {
+    var hp = document.createElement('input');
+    hp.type = 'text'; hp.name = 'company'; hp.className = 'hp-field';
+    hp.tabIndex = -1; hp.autocomplete = 'off'; hp.setAttribute('aria-hidden', 'true');
+    form.appendChild(hp);
+
+    form.addEventListener('submit', function (e) {
+      e.preventDefault();
+      var input = form.querySelector('input[type="email"]');
+      var btn = form.querySelector('button');
+      if (!input) return;
+      var email = input.value.trim();
+      if (!email) return;
+      var original = btn ? btn.textContent : '';
+      if (btn) { btn.disabled = true; btn.textContent = 'Sending…'; }
+      clearError(form);
+
+      fetch('/subscribe', {
+        method: 'POST',
+        headers: { 'content-type': 'application/json' },
+        body: JSON.stringify({ email: email, company: hp.value })
+      }).then(function (res) {
+        return res.json().catch(function () { return {}; }).then(function (data) {
+          return { ok: res.ok, data: data };
+        });
+      }).then(function (r) {
+        if (r.ok && r.data && r.data.ok) {
+          success(form, r.data.already
+            ? "You're already on the list — thanks."
+            : "You're on the list. Watch for the next dispatch.");
+        } else {
+          if (btn) { btn.disabled = false; btn.textContent = original; }
+          error(form, (r.data && r.data.error === 'invalid email')
+            ? "That email doesn't look right."
+            : "Hmm, that didn't go through. Try again in a moment.");
+        }
+      }).catch(function () {
+        if (btn) { btn.disabled = false; btn.textContent = original; }
+        error(form, "Network hiccup — try again.");
+      });
+    });
+  });
+
+  function success(form, msg) {
+    var note = document.createElement('div');
+    note.className = 'form-note';
+    note.setAttribute('role', 'status');
+    note.textContent = msg;
+    form.replaceWith(note);
+  }
+  function clearError(form) {
+    var n = form.parentNode && form.parentNode.querySelector('.form-error');
+    if (n) n.remove();
+  }
+  function error(form, msg) {
+    clearError(form);
+    var note = document.createElement('div');
+    note.className = 'form-error';
+    note.setAttribute('role', 'alert');
+    note.textContent = msg;
+    form.parentNode.insertBefore(note, form.nextSibling);
+  }
+})();
+</script>
 </body>
 </html>
