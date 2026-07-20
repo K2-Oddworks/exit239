@@ -474,6 +474,11 @@
   @keyframes mk-ghost { 0%{filter:none;opacity:1;transform:translate(0,0);} 18%{filter:drop-shadow(-3px 0 0 rgba(0,240,190,0.7)) drop-shadow(3px 0 0 rgba(255,0,120,0.7));opacity:0.9;} 32%{transform:translate(1px,0);} 50%{filter:drop-shadow(-7px 0 0 rgba(0,240,190,0.8)) drop-shadow(7px 0 0 rgba(255,0,120,0.8));opacity:0.65;transform:translate(-1px,0);} 54%{opacity:0.15;} 58%{opacity:0.9;} 74%{filter:drop-shadow(-2px 0 0 rgba(0,240,190,0.6)) drop-shadow(2px 0 0 rgba(255,0,120,0.6));transform:translate(0,0);} 100%{filter:none;opacity:1;} }
   @keyframes mk-warp { 0%{transform:skewX(0) scale(1,1);opacity:1;} 15%{transform:skewX(13deg) scale(0.9,1.18);opacity:0.85;} 30%{transform:skewX(-11deg) scale(1.16,0.8);opacity:1;} 39%{opacity:0.18;} 42%{opacity:1;} 55%{transform:skewX(9deg) scale(0.85,1.3);} 70%{transform:skewX(-5deg) scale(1.06,0.9);opacity:0.9;} 85%{transform:skewX(2deg) scale(0.98,1.05);opacity:1;} 100%{transform:skewX(0) scale(1,1);opacity:1;} }
   @keyframes mk-dissolve { 0%{opacity:1;transform:scale(1);filter:none;} 12%{opacity:0.95;filter:brightness(1.8);} 26%{opacity:0.3;transform:scale(1.1);filter:brightness(1);} 45%{opacity:0.05;transform:scale(1.14);} 72%{opacity:0;transform:scale(1.14);} 86%{opacity:0.35;transform:scale(0.97);} 100%{opacity:1;transform:scale(1);} }
+
+  /* ===== HERO PHOTO SHATTER (swirl) ===== */
+  .hero-canvas { position: absolute; inset: 0; width: 100%; height: 100%; display: block; z-index: 0; }
+  .story-hero::before { z-index: 1; }
+  .story-hero-inner { z-index: 2; }
 </style>
 </head>
 <body>
@@ -747,6 +752,135 @@
       else { mark.classList.add('mk-' + fx); }
     });
     mark.addEventListener('animationend', clear);
+  });
+})();
+</script>
+
+<script>
+/* ex239_story_fx */
+(function () {
+  var band = document.querySelector('.story-hero');
+  if (!band) return;
+  var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (reduce) return;
+  var cs = getComputedStyle(band);
+  var m = /url\(["']?(.*?)["']?\)/.exec(cs.backgroundImage);
+  if (!m || !m[1] || m[1] === 'none') return;
+  var src = m[1];
+  var posY = 0.42;
+  var bp = (cs.backgroundPosition || '').trim().split(/\s+/);
+  if (bp.length) { var yy = parseFloat(bp[bp.length - 1]); if (!isNaN(yy)) posY = yy / 100; }
+
+  var canvas = document.createElement('canvas');
+  canvas.className = 'hero-canvas';
+  band.insertBefore(canvas, band.firstChild);
+  var ctx = canvas.getContext('2d');
+  var img = new Image();
+  var W = 0, H = 0, dpr = 1, scale = 1, ox = 0, oy = 0, blocks = [], bw = 0, bh = 0;
+  var animating = false, ready = false, started = false;
+  var MAXDELAY = 0.18, DURATION = 1750;
+
+  function measure() {
+    var r = band.getBoundingClientRect();
+    W = Math.max(1, Math.round(r.width)); H = Math.max(1, Math.round(r.height));
+    dpr = Math.min(window.devicePixelRatio || 1, 2);
+    canvas.width = W * dpr; canvas.height = H * dpr;
+    canvas.style.width = W + 'px'; canvas.style.height = H + 'px';
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  }
+  function build() {
+    var iw = img.naturalWidth, ih = img.naturalHeight;
+    scale = Math.max(W / iw, H / ih);
+    ox = (W - iw * scale) / 2; oy = (H - ih * scale) * posY;
+    var target = 44;
+    var cols = Math.max(6, Math.round(W / target));
+    var rows = Math.max(4, Math.round(H / target));
+    bw = W / cols; bh = H / rows;
+    var cx = W / 2, cy = H / 2, maxDist = 1;
+    blocks = [];
+    for (var r = 0; r < rows; r++) {
+      for (var c = 0; c < cols; c++) {
+        var dx = c * bw, dy = r * bh;
+        var vx = dx + bw / 2 - cx, vy = dy + bh / 2 - cy;
+        var d = Math.hypot(vx, vy) || 1;
+        if (d > maxDist) maxDist = d;
+        var ux = vx / d, uy = vy / d;      // radial unit
+        var txd = -uy, tyd = ux;           // tangential unit (swirl)
+        var tang = 55 + Math.random() * 95;
+        var rad = 12 + Math.random() * 42;
+        blocks.push({
+          dx: dx, dy: dy,
+          sx: (dx - ox) / scale, sy: (dy - oy) / scale, sw: bw / scale, sh: bh / scale,
+          ex: txd * tang + ux * rad + (Math.random() * 30 - 15),
+          ey: tyd * tang + uy * rad + (Math.random() * 30 - 15),
+          spin: Math.random() * 3 - 1.5,
+          dist: d
+        });
+      }
+    }
+    for (var i = 0; i < blocks.length; i++) blocks[i].delay = (blocks[i].dist / maxDist) * MAXDELAY;
+    ready = true;
+  }
+  function render(p) {
+    ctx.clearRect(0, 0, W, H);
+    ctx.fillStyle = '#17131A'; ctx.fillRect(0, 0, W, H);
+    for (var i = 0; i < blocks.length; i++) {
+      var b = blocks[i];
+      var local = (p * (1 + MAXDELAY) - b.delay) / (1 - MAXDELAY);
+      if (local < 0) local = 0; else if (local > 1) local = 1;
+      var s = Math.sin(Math.PI * local);
+      if (s < 0.001) {
+        ctx.globalAlpha = 1;
+        ctx.drawImage(img, b.sx, b.sy, b.sw, b.sh, b.dx - 0.5, b.dy - 0.5, bw + 1, bh + 1);
+        continue;
+      }
+      var tx = b.dx + b.ex * s, ty = b.dy + b.ey * s, sc = 1 - 0.1 * s;
+      ctx.globalAlpha = Math.max(0, 1 - 0.8 * s);
+      ctx.save();
+      ctx.translate(tx + bw / 2, ty + bh / 2);
+      ctx.rotate(b.spin * s);
+      ctx.scale(sc, sc);
+      ctx.drawImage(img, b.sx, b.sy, b.sw, b.sh, -bw / 2 - 0.5, -bh / 2 - 0.5, bw + 1, bh + 1);
+      ctx.restore();
+    }
+    ctx.globalAlpha = 1;
+  }
+  function play() {
+    if (!ready || animating) return;
+    animating = true;
+    var start = performance.now();
+    (function frame(now) {
+      var p = (now - start) / DURATION;
+      if (p >= 1) { render(1); animating = false; return; }
+      render(p); requestAnimationFrame(frame);
+    })(performance.now());
+  }
+  function start() {
+    if (started) return; started = true;
+    measure(); build(); render(1);
+    band.style.cursor = 'pointer';
+    var key = 'ex239_fx_' + location.pathname;
+    if ('IntersectionObserver' in window) {
+      var io = new IntersectionObserver(function (ents) {
+        for (var i = 0; i < ents.length; i++) {
+          if (ents[i].isIntersecting) {
+            io.disconnect();
+            if (!sessionStorage.getItem(key)) { try { sessionStorage.setItem(key, '1'); } catch (e) {} setTimeout(play, 250); }
+          }
+        }
+      }, { threshold: 0.35 });
+      io.observe(band);
+    }
+  }
+  img.onload = start;
+  img.onerror = function () { canvas.remove(); };
+  img.src = src;
+  if (img.complete && img.naturalWidth) start();
+  band.addEventListener('click', function () { play(); });
+  var rt;
+  window.addEventListener('resize', function () {
+    clearTimeout(rt);
+    rt = setTimeout(function () { if (ready && !animating) { measure(); build(); render(1); } }, 200);
   });
 })();
 </script>
