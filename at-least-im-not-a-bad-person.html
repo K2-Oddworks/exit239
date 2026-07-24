@@ -1,0 +1,552 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>At Least I'm Not a Bad Person — Exit239</title>
+<meta name="description" content="Gerald had never been given much. He decided, one Tuesday, to take something instead.">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Exit239">
+<meta property="og:title" content="At Least I'm Not a Bad Person — Exit239">
+<meta property="og:description" content="Gerald had never been given much. He decided, one Tuesday, to take something instead.">
+<meta property="og:url" content="https://exit239.pages.dev/at-least-im-not-a-bad-person.html">
+<meta property="og:image" content="https://exit239.pages.dev/og-at-least.jpg">
+<meta property="og:image:width" content="2400">
+<meta property="og:image:height" content="1260">
+<meta property="og:image:alt" content="Exit 239 — Dispatch No. 04: At Least I'm Not a Bad Person">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="At Least I'm Not a Bad Person — Exit239">
+<meta name="twitter:description" content="Gerald had never been given much. He decided, one Tuesday, to take something instead.">
+<meta name="twitter:image" content="https://exit239.pages.dev/og-at-least.jpg">
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Source+Serif+4:opsz,wght@8..60,400;8..60,500;8..60,600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+
+<style>
+  :root {
+    --violet: #6B4C7A;
+    --violet-deep: #4A3358;
+    --violet-darker: #17131A;
+    --violet-light: #B99FC7;
+    --bg: #FAF7F5;
+    --ink: #1C1620;
+    --ink-body: #2b2330;
+    --ink-dim: #6b6270;
+    --ink-dim-light: #a89aae;
+    --border: #e5dfe2;
+
+    /* per-story palette: cold, flat, fluorescent-adjacent grey */
+    --flat-bg: #f3f1ee;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    background: var(--bg);
+    color: var(--ink);
+    font-family: 'Source Serif 4', serif;
+  }
+  a { color: inherit; text-decoration: none; }
+  :focus-visible { outline: 2px solid var(--violet); outline-offset: 3px; }
+  @media (prefers-reduced-motion: reduce) {
+    * { animation: none !important; transition: none !important; }
+  }
+
+  header {
+    background: var(--violet-darker);
+    border-bottom: 3px solid var(--violet);
+    padding: 20px 24px;
+  }
+  .header-inner {
+    max-width: 720px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+  .wordmark {
+    font-family: 'Space Mono', monospace;
+    font-weight: 700;
+    font-size: 17px;
+    letter-spacing: 0.04em;
+    color: #FAF7F5;
+    display: flex;
+    align-items: center;
+  }
+  .wordmark .num { color: var(--violet-light); }
+  .back-link {
+    font-family: 'Inter', sans-serif;
+    font-size: 12px;
+    letter-spacing: 0.04em;
+    color: var(--ink-dim-light);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    transition: color 0.15s ease;
+  }
+  .back-link:hover { color: var(--violet-light); }
+
+  .story-meta {
+    max-width: 640px;
+    margin: 0 auto;
+    padding: 56px 24px 16px;
+  }
+  .dispatch-marker {
+    font-family: 'Space Mono', monospace;
+    font-size: 12px;
+    letter-spacing: 0.1em;
+    color: var(--violet);
+    margin-bottom: 20px;
+  }
+  .story-title {
+    font-family: 'Space Mono', monospace;
+    font-weight: 700;
+    font-size: clamp(26px, 5.5vw, 38px);
+    line-height: 1.2;
+    color: var(--ink);
+    margin-bottom: 12px;
+  }
+  .story-sub {
+    font-family: 'Inter', sans-serif;
+    font-size: 14px;
+    color: var(--ink-dim);
+  }
+
+  /* ===== SIGNATURE ELEMENT: the opening refrain loop ===== */
+  .refrain-open {
+    max-width: 640px;
+    margin: 0 auto;
+    padding: 8px 24px 12px;
+  }
+  .refrain-line {
+    font-family: 'Space Mono', monospace;
+    font-size: 13px;
+    letter-spacing: 0.02em;
+    color: var(--violet-deep);
+    opacity: 0;
+    transform: translateY(6px);
+    transition: opacity 0.5s ease, transform 0.5s ease;
+  }
+  .refrain-line.show { opacity: 1; transform: translateY(0); }
+  .refrain-line.r1 { opacity: 0.9; }
+  .refrain-line.r2 { opacity: 0.55; margin-left: 14px; }
+  .refrain-line.r3 { opacity: 0.3; margin-left: 28px; margin-bottom: 18px; }
+
+  .story-body {
+    max-width: 640px;
+    margin: 0 auto;
+    padding: 8px 24px 8px;
+  }
+  p.body-text {
+    line-height: 1.8;
+    font-size: 19px;
+    margin: 0 0 22px;
+    color: var(--ink-body);
+  }
+  p.body-text:last-child { margin-bottom: 0; }
+
+  /* the phrase itself, wherever it recurs mid-story, gets a quiet highlight treatment */
+  .refrain-inline {
+    color: var(--violet-deep);
+    font-weight: 600;
+  }
+
+  hr.section-break {
+    max-width: 100px;
+    margin: 44px auto;
+    border: none;
+    border-top: 1px solid var(--border);
+  }
+
+  /* ===== SIGNATURE ELEMENT: closing refrain, stacked and building ===== */
+  .refrain-close-wrap {
+    max-width: 640px;
+    margin: 40px auto 0;
+    padding: 0 24px;
+  }
+  .refrain-close-line {
+    font-family: 'Space Mono', monospace;
+    font-size: 14px;
+    letter-spacing: 0.02em;
+    color: var(--ink-dim);
+    margin-bottom: 10px;
+    opacity: 0;
+    transform: translateY(4px);
+    transition: opacity 0.6s ease, transform 0.6s ease;
+  }
+  .refrain-close-line.show { opacity: 1; transform: translateY(0); }
+  .refrain-close-line.final {
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--ink);
+    margin-top: 24px;
+    padding-top: 20px;
+    border-top: 1px dashed var(--violet-deep);
+  }
+
+  .end-mark {
+    text-align: center;
+    padding: 48px 24px 0;
+    font-family: 'Space Mono', monospace;
+    color: var(--violet);
+    font-size: 14px;
+  }
+
+  .next-dispatch {
+    max-width: 640px;
+    margin: 56px auto 0;
+    padding: 0 24px;
+  }
+  .next-dispatch a {
+    display: block;
+    border-top: 1px solid var(--border);
+    padding: 28px 0;
+    transition: padding-left 0.15s ease;
+  }
+  .next-dispatch a:hover { padding-left: 8px; }
+  .next-label {
+    font-family: 'Space Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    color: var(--violet);
+    margin-bottom: 8px;
+  }
+  .next-title {
+    font-family: 'Space Mono', monospace;
+    font-weight: 700;
+    font-size: 20px;
+    color: var(--ink);
+  }
+
+  .capture-inline {
+    max-width: 640px;
+    margin: 0 auto;
+    padding: 40px 24px 64px;
+  }
+  .capture-box {
+    background: #F0E9F2;
+    border: 1px solid #ddc9e2;
+    border-radius: 3px;
+    padding: 32px 28px;
+  }
+  .capture-box h3 {
+    font-family: 'Space Mono', monospace;
+    font-size: 16px;
+    color: var(--violet-deep);
+    margin-bottom: 8px;
+  }
+  .capture-box p {
+    font-family: 'Inter', sans-serif;
+    font-size: 14px;
+    color: var(--ink-dim);
+    margin-bottom: 18px;
+    line-height: 1.6;
+  }
+  .capture-form { display: flex; gap: 8px; flex-wrap: wrap; }
+  .capture-form input[type="email"] {
+    flex: 1;
+    min-width: 200px;
+    font-family: 'Inter', sans-serif;
+    font-size: 14px;
+    padding: 12px 14px;
+    border: 1px solid #ddc9e2;
+    border-radius: 2px;
+    background: #FAF7F5;
+    color: var(--ink);
+  }
+  .capture-form button {
+    font-family: 'Space Mono', monospace;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    padding: 12px 22px;
+    background: var(--violet-deep);
+    color: #FAF7F5;
+    border: none;
+    border-radius: 2px;
+    cursor: pointer;
+    transition: background 0.15s ease;
+  }
+  .capture-form button:hover { background: var(--violet); }
+
+  footer {
+    background: var(--violet-darker);
+    border-top: 3px solid var(--violet);
+    padding: 48px 24px 32px;
+  }
+  .footer-inner {
+    max-width: 640px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+  .footer-mark {
+    font-family: 'Space Mono', monospace;
+    font-size: 13px;
+    color: var(--ink-dim-light);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .footer-tagline {
+    font-family: 'Inter', sans-serif;
+    font-size: 12px;
+    color: var(--ink-dim);
+  }
+
+  /* ===== CHROME PARITY: brand mark ===== */
+  a.wordmark { display: inline-flex; align-items: center; gap: 8px; transition: opacity 0.15s ease; }
+  a.wordmark:hover { opacity: 0.82; }
+  .brand-mark { width: 1.5em; height: 1.5em; flex: none; color: var(--violet-light); cursor: pointer; touch-action: manipulation; -webkit-tap-highlight-color: transparent; transform-box: border-box; transform-origin: center; }
+  @keyframes ex239-flicker { 0%,92%,100%{opacity:1;} 93.5%{opacity:0.15;} 94.5%{opacity:1;} 96%{opacity:0.35;} 97%{opacity:1;} }
+  @keyframes ex239-drift { 0%,78%,100%{transform:translate(0,0);opacity:0.85;} 85%{transform:translate(2px,-1.5px);opacity:0.4;} 90%{transform:translate(0,0);opacity:0.85;} }
+  .ex239-scanline { animation: ex239-flicker 9s ease-in-out infinite; }
+  .ex239-pixel { animation: ex239-drift 6.5s ease-in-out infinite; }
+  .brand-mark.mk-flicker { animation: mk-flicker 1.3s linear 1; }
+  .brand-mark.mk-ghost { animation: mk-ghost 1.15s linear 1; }
+  .brand-mark.mk-warp { animation: mk-warp 1.2s ease-in-out 1; }
+  .brand-mark.mk-dissolve { animation: mk-dissolve 1.4s ease-in-out 1; }
+  @keyframes mk-flicker { 0%{opacity:1;} 5%{opacity:0.15;} 7%{opacity:1;} 10%{opacity:0.5;transform:translate(0.5px,-0.5px);} 12%{opacity:1;transform:translate(0,0);} 19%{opacity:0.08;} 22%{opacity:1;} 33%{opacity:0.9;filter:brightness(2);} 35%{opacity:1;filter:brightness(1);} 45%{opacity:0.12;transform:translate(-0.5px,0.5px);} 48%{opacity:1;transform:translate(0,0);} 60%{opacity:0.55;} 62%{opacity:1;} 76%{opacity:0.06;} 82%{opacity:1;} 91%{opacity:0.5;} 93%{opacity:1;} 100%{opacity:1;} }
+  @keyframes mk-ghost { 0%{filter:none;opacity:1;transform:translate(0,0);} 18%{filter:drop-shadow(-3px 0 0 rgba(0,240,190,0.7)) drop-shadow(3px 0 0 rgba(255,0,120,0.7));opacity:0.9;} 32%{transform:translate(1px,0);} 50%{filter:drop-shadow(-7px 0 0 rgba(0,240,190,0.8)) drop-shadow(7px 0 0 rgba(255,0,120,0.8));opacity:0.65;transform:translate(-1px,0);} 54%{opacity:0.15;} 58%{opacity:0.9;} 74%{filter:drop-shadow(-2px 0 0 rgba(0,240,190,0.6)) drop-shadow(2px 0 0 rgba(255,0,120,0.6));transform:translate(0,0);} 100%{filter:none;opacity:1;} }
+  @keyframes mk-warp { 0%{transform:skewX(0) scale(1,1);opacity:1;} 15%{transform:skewX(13deg) scale(0.9,1.18);opacity:0.85;} 30%{transform:skewX(-11deg) scale(1.16,0.8);opacity:1;} 39%{opacity:0.18;} 42%{opacity:1;} 55%{transform:skewX(9deg) scale(0.85,1.3);} 70%{transform:skewX(-5deg) scale(1.06,0.9);opacity:0.9;} 85%{transform:skewX(2deg) scale(0.98,1.05);opacity:1;} 100%{transform:skewX(0) scale(1,1);opacity:1;} }
+  @keyframes mk-dissolve { 0%{opacity:1;transform:scale(1);filter:none;} 12%{opacity:0.95;filter:brightness(1.8);} 26%{opacity:0.3;transform:scale(1.1);filter:brightness(1);} 45%{opacity:0.05;transform:scale(1.14);} 72%{opacity:0;transform:scale(1.14);} 86%{opacity:0.35;transform:scale(0.97);} 100%{opacity:1;transform:scale(1);} }
+  /* ===== EMAIL CAPTURE FEEDBACK ===== */
+  .form-note { font-family:'Space Mono',monospace; font-size:14px; line-height:1.5; color:var(--violet-deep); padding:4px 0; }
+  .form-error { font-family:'Inter',sans-serif; font-size:13px; color:#b8557a; margin-top:10px; }
+  .hp-field { position:absolute !important; left:-9999px !important; width:1px; height:1px; opacity:0; overflow:hidden; }
+  /* ===== VICTIM PHOTOS ===== */
+  .victim-photos { margin: 34px 0 30px; }
+  .victim-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+  .victim-grid img { width:100%; aspect-ratio:3/4; object-fit:cover; object-position:center 20%; border-radius:3px; display:block; background:var(--flat-bg); }
+  .victim-caption { font-family:'Space Mono',monospace; font-size:13px; letter-spacing:0.04em; color:var(--ink-dim); margin-top:14px; }
+  .victim-disclaimer { font-family:'Inter',sans-serif; font-size:11.5px; line-height:1.5; color:var(--ink-dim-light); margin-top:8px; font-style:italic; }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-inner">
+    <a href="index.html" class="wordmark" aria-label="Exit239 — home"><svg class="brand-mark" viewBox="0 0 100 100" aria-hidden="true" focusable="false"><circle cx="50" cy="50" r="42" fill="none" stroke="currentColor" stroke-width="4" stroke-dasharray="14 6"/><circle cx="50" cy="50" r="24" fill="none" stroke="currentColor" stroke-width="6"/><line class="ex239-scanline" x1="12" y1="50" x2="88" y2="50" stroke="currentColor" stroke-width="5"/><rect class="ex239-pixel" x="78" y="18" width="6" height="6" fill="#7DD8A6"/></svg><span class="wordmark-text">EXIT<span class="num">239</span></span></a>
+    <a href="index.html" class="back-link">← all dispatches</a>
+  </div>
+</header>
+
+<div class="story-meta">
+  <div class="dispatch-marker">EXIT 239 — DISPATCH NO. 04</div>
+  <h1 class="story-title">At Least I'm Not a Bad Person</h1>
+  <p class="story-sub">Gerald had never been given much. He decided, one Tuesday, to take something instead.</p>
+</div>
+
+<div class="refrain-open" id="refrain-open">
+  <div class="refrain-line r1" id="rf1">at least I'm not a bad person</div>
+  <div class="refrain-line r2" id="rf2">at least I'm not a bad person</div>
+  <div class="refrain-line r3" id="rf3">at least I'm not a bad person</div>
+</div>
+
+<div class="story-body">
+  <p class="body-text"><span class="refrain-inline">At least I'm not a bad person</span>, Gerald thought, most nights, the way other men might check a lock or count their change. He was fifty-four years old and had not done much with the years, not in any way he could point to on paper, not in a way that would make a resume interesting or a eulogy long. He drove parts delivery for an HVAC supplier on the industrial side of town, six days a week some months, and had done that job for eleven years, a length of time he had once, with real conviction, believed was temporary. He was not an unintelligent man. He read. He kept a truck clean. He simply hadn't been given much, and had, over time, made a kind of peace with that by keeping one ledger balanced even when nothing else was: he paid his bills, he didn't cheat anyone, he called his mother on Sundays before she died and kept calling the number for a while after out of habit before he made himself stop. <span class="refrain-inline">At least I'm not a bad person.</span> It was not much of an accomplishment, some nights, lying there totaling it up. It was also, some nights, the only one he had.</p>
+
+  <p class="body-text">It happened on the frontage road by the outlet mall, three cars back from the light. A silver Charger cut across two lanes without a signal, close enough that Gerald had to brake hard enough to feel it in his neck, and the kid behind the wheel never looked over. Never knew Gerald existed. It was the kind of thing that happens to somebody fifty times a day and is forgotten by the next intersection, if you have a life sized normally enough to forget things in.</p>
+
+  <p class="body-text">Gerald did not forget it. Whoever that kid was, he had never had to ask for anything in his life. Gerald, in fifty-four years, had never once been given that.</p>
+
+  <hr class="section-break">
+
+  <p class="body-text">Finding him took less effort than Gerald expected, which bothered him more than he let himself examine. A dash cam clip he'd saved off his own dashboard, a partial plate, forty minutes on a public records site that exists for exactly this kind of thing and pretends it doesn't. Tyler Voss. Twenty-one. Played baseball at a college a few states over, some infield position Gerald never bothered learning the name of, a scholarship his parents topped off the rest of. There was a girlfriend in most of the photos, blond, laughing at something just off camera, always. There was a house on the good side of town with two clean cars in the driveway and a basketball hoop nobody used.</p>
+
+  <p class="body-text">Gerald looked at the pictures more nights than he'd have admitted to anyone. Not out of hatred, exactly. Hatred would have been simpler. It was closer to arithmetic, a long column of numbers he kept adding up and getting a total he didn't like, and going back through the column again to see where the mistake was, and not finding one.</p>
+
+  <p class="body-text">He told himself, in this period, that he only wanted to scare him. He believes, even now, that this was true at the time he believed it.</p>
+
+  <p class="body-text">He spent three weeks doing nothing but watching. He learned the boy's schedule the way you'd learn a bus route: gym at six most mornings, class at nine, the girlfriend's car in his driveway on Tuesday and Thursday nights, gone by eleven. He learned which stairwell in the gym's parking structure had a burnt-out light and which one had a camera that had been broken since before Gerald ever started looking. None of this felt, to him, like the beginning of anything. It felt like information. He was a man who liked having information. He had simply never before had a reason to gather this particular kind.</p>
+
+  <p class="body-text">He bought a jacket for the occasion, plain, nothing that would be remembered, and he bought it in cash at a store forty minutes from where he lived, and told himself this too was just information-gathering, just being careful, a reasonable man taking reasonable precautions for a thing that was still, in his head, mostly hypothetical.</p>
+
+  <hr class="section-break">
+
+  <p class="body-text">He went on a Tuesday, 5:50 in the morning, in the gym's stairwell with the broken camera, before the sun was up and before anyone else's car was in the lot. He had practiced in his garage with the lights off, the angle, the follow-through, the specific amount of force required low on the back to take away what he wanted taken away, because whatever else was true about what he was becoming, he wanted this on the record, even if the only person keeping the record was himself: he was not going to kill anyone. He was careful about that. He thought of it, in the weeks leading up, as a kind of restraint he was proud of.</p>
+
+  <p class="body-text">Tyler came out of the stairwell already looking at his phone, the loose, unguarded walk of a person who has never once needed to check an empty lot before crossing it. Gerald came from the side he'd been standing on for eleven minutes. The first swing was already committed before Tyler turned his head, aimed low, across the small of the back, and after that it was mostly sound, a short, ugly, wet-sounding crack that Gerald would hear at low volume for the rest of his life, under other sounds, the way a room sometimes hums after a light gets turned off in it. Tyler went down loud. Gerald hit the same spot a second time, to be sure, and then he was walking, not running, out the far stairwell, the bat already back in the gym bag, his heart rate, he would think about this part later, with a kind of horror at himself that arrived late and left early, not far above what it would have been on an ordinary walk to his car.</p>
+
+  <p class="body-text">He read, three days later, that the damage was permanent. The spinal cord, not just bone. Tyler Voss would not walk again.</p>
+
+  <figure class="victim-photos">
+    <div class="victim-grid">
+      <img src="tyler-portrait.jpg" alt="A young man in a tuxedo, smiling" loading="lazy">
+      <img src="tyler-baseball.jpg" alt="A young man in a baseball uniform on the field" loading="lazy">
+      <img src="tyler-couple.jpg" alt="A young man and his girlfriend making faces at the camera" loading="lazy">
+    </div>
+    <figcaption class="victim-caption">Tyler Voss. Twenty-one. Before.</figcaption>
+    <p class="victim-disclaimer">A work of fiction. These images are AI-generated; the person shown does not exist, and any resemblance to a real individual is coincidental.</p>
+  </figure>
+
+  <p class="body-text">Gerald had wanted him to limp. For years, maybe, as a kind of tuition. He got something considerably larger than what he thought he'd ordered, and for a while he told himself that wasn't really his fault, that precision, at that speed, in the dark, was never guaranteed, and a man can only be responsible for his intentions.</p>
+
+  <hr class="section-break">
+
+  <p class="body-text">A month later, on a Sunday, he drove past the house. He told himself the whole way there that he wasn't going to.</p>
+
+  <p class="body-text">The two clean cars were gone. In their place was a van, the kind with a lowered floor and a ramp built into the side door, parked at an angle that suggested whoever drove it was still learning its width. Along the front steps, where there used to just be steps, somebody had built a wooden ramp, new lumber, not yet weathered, switchbacking up to the door at a careful, code-compliant grade. Gerald recognized, in the joinery, the work of a father doing this on a weekend with a level and a tape measure and no real understanding yet of how long they'd be using it.</p>
+
+  <p class="body-text">He parked two houses down and left the engine running for eleven minutes.</p>
+
+  <p class="body-text">He did not see Tyler. He didn't need to. The ramp told him everything it needed to: a family rebuilding the entire architecture of their lives around a fact they hadn't chosen and couldn't undo, quietly, the way you rebuild around a flood, without asking anyone's permission.</p>
+
+  <p class="body-text">Gerald cried in his car on that quiet street, both hands still on the wheel, ugly and silent, and he did not fully know, even as it was happening, whether he was crying for the boy or for himself, and some part of him suspected, correctly, that it didn't actually matter which, the tears would be spent either way, and nothing about the ramp would be undone by them. <span class="refrain-inline">At least I'm not a bad person</span>, he thought, right there, crying, and did not know anymore if he believed it or was only saying it, the way you say a word too many times until it stops meaning what it used to. He drove home before anyone could notice a stranger crying outside their house.</p>
+
+  <hr class="section-break">
+
+  <p class="body-text">That night he made himself dinner. The same dinner he always made on Sundays. He ate it in the same order he always did, protein first, then the vegetable, the starch last, a habit from a diet he'd tried and abandoned years ago that had simply never stopped being how he ate.</p>
+
+  <p class="body-text">Somewhere around the third bite, he found himself thinking about the Charger again. Two lanes, no signal, the brake pedal hard enough that his neck ached for two days after. The kid hadn't even looked over. That detail kept surfacing, unbidden, disproportionate to everything else in his memory of that day, not the fear of the near miss, just the specific, total absence of acknowledgment. As though Gerald, and the eleven years, and the parts truck, and everything else that had never once broken his way, weren't real enough to warrant a glance in a mirror.</p>
+
+  <p class="body-text">He ate another bite. He thought, briefly, about the ramp, and felt something in his chest twist the way it had in the car. He kept eating.</p>
+
+  <p class="body-text"><span class="refrain-inline">I'm not a bad person</span>, he told himself, and the sentence arrived whole, already familiar, like something he'd said before and would say again. Bad behavior that never gets punished just keeps repeating itself. Somebody has to be the one who says enough.</p>
+
+  <p class="body-text">He kept eating. He thought about it further, the way he'd think through a route with a bad merge, looking for the angle that made it work. The kid drove like that once, sure, but he'd have driven like that a hundred more times, a thousand, and sooner or later a hundred times catches up to somebody. A light he doesn't stop at. A lane he doesn't check. Somebody's kid in a crosswalk who doesn't get as lucky as Gerald did that day on the frontage road. Now he can't. Now he'll never drive fast again in his life. Gerald sat with that for a moment, turning it over, and something in his chest settled, the way a room settles once you've found the right place to set something heavy down.</p>
+
+  <p class="body-text">I probably saved somebody's life doing this, he thought. Maybe more than one. I'm sort of a hero, if you actually think about it.</p>
+
+  <p class="body-text">He had aimed low, across the back. Not the head. He had not wanted to kill him. Because after all, <span class="refrain-inline">he's not a bad person.</span></p>
+
+  <p class="body-text">He finished his dinner. He rinsed the plate and set it in the rack to dry, the way he did every night, and went to bed at his usual time, and in the morning he got up and went to work, because there was a route to run and the parts weren't going to deliver themselves, and whatever he was carrying now, he would apparently be carrying it up and down the same roads as everything else, for as long as it took.</p>
+</div>
+
+<div class="refrain-close-wrap">
+  <div class="refrain-close-line" id="rc1">at least I'm not a bad person</div>
+  <div class="refrain-close-line" id="rc2">at least I'm not a bad person</div>
+  <div class="refrain-close-line" id="rc3">at least I'm not a bad person</div>
+  <div class="refrain-close-line final" id="rc4">At least I'm not a bad person, he thought, the way he always had, lying there totaling it up, and for the first time in his life the number came out exactly even.</div>
+</div>
+
+<div class="end-mark">— Exit239 🌵</div>
+
+<div class="next-dispatch">
+  <a href="index.html">
+    <div class="next-label">BACK TO ALL DISPATCHES</div>
+    <div class="next-title">Exit239 →</div>
+  </a>
+</div>
+
+<div class="capture-inline">
+  <div class="capture-box">
+    <h3>Get the next dispatch first</h3>
+    <p>New stories land without warning. Leave your email and we'll let you know when the next one turns up.</p>
+    <form class="capture-form" onsubmit="event.preventDefault();">
+      <input type="email" placeholder="you@somewhere.com" required aria-label="Email address">
+      <button type="submit">Subscribe</button>
+    </form>
+  </div>
+</div>
+
+<footer>
+  <div class="footer-inner">
+    <div class="footer-mark"><svg class="brand-mark" viewBox="0 0 100 100" aria-hidden="true" focusable="false"><circle cx="50" cy="50" r="42" fill="none" stroke="currentColor" stroke-width="4" stroke-dasharray="14 6"/><circle cx="50" cy="50" r="24" fill="none" stroke="currentColor" stroke-width="6"/><line class="ex239-scanline" x1="12" y1="50" x2="88" y2="50" stroke="currentColor" stroke-width="5"/><rect class="ex239-pixel" x="78" y="18" width="6" height="6" fill="#7DD8A6"/></svg><span>EXIT239</span></div>
+    <div class="footer-tagline">pick a number, not just a vibe</div>
+  </div>
+</footer>
+
+<script>
+  // Opening refrain: three fading echoes of the title phrase, staggered in on load
+  window.addEventListener('DOMContentLoaded', () => {
+    setTimeout(() => document.getElementById('rf1').classList.add('show'), 200);
+    setTimeout(() => document.getElementById('rf2').classList.add('show'), 700);
+    setTimeout(() => document.getElementById('rf3').classList.add('show'), 1200);
+  });
+
+  // Closing refrain: triggers when the reader scrolls into view, three echoes then the final line
+  const closeObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        setTimeout(() => document.getElementById('rc1').classList.add('show'), 100);
+        setTimeout(() => document.getElementById('rc2').classList.add('show'), 700);
+        setTimeout(() => document.getElementById('rc3').classList.add('show'), 1300);
+        setTimeout(() => document.getElementById('rc4').classList.add('show'), 2200);
+        closeObserver.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.3 });
+  closeObserver.observe(document.querySelector('.refrain-close-wrap'));
+</script>
+
+
+<script>
+(function () {
+  var marks = document.querySelectorAll('.brand-mark');
+  if (!marks.length) return;
+  var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var SVGNS = 'http://www.w3.org/2000/svg';
+  var order = ['pixels', 'flicker', 'ghost', 'warp'];
+  var classes = ['mk-flicker', 'mk-ghost', 'mk-warp', 'mk-dissolve'];
+  var i = 0;
+  function pixelBurst(mark) {
+    var r = mark.getBoundingClientRect();
+    var cx = r.left + r.width / 2, cy = r.top + r.height / 2, N = 28, dur = 1200;
+    for (var n = 0; n < N; n++) {
+      var el = document.createElement('div');
+      var sz = 2 + Math.floor(Math.random() * 3);
+      var jx = (Math.random() * 2 - 1) * (r.width / 3), jy = (Math.random() * 2 - 1) * (r.height / 3);
+      var color = Math.random() < 0.18 ? '#7DD8A6' : '#B99FC7';
+      var delay = Math.floor(Math.random() * 220);
+      el.style.cssText = 'position:fixed;left:' + (cx + jx) + 'px;top:' + (cy + jy) + 'px;width:' + sz + 'px;height:' + sz + 'px;background:' + color + ';pointer-events:none;z-index:99999;opacity:1;transform:translate(-50%,-50%);will-change:transform,opacity;transition:transform ' + dur + 'ms cubic-bezier(.16,.7,.24,1) ' + delay + 'ms, opacity ' + dur + 'ms ease-out ' + delay + 'ms;';
+      document.body.appendChild(el);
+      var ang = Math.random() * Math.PI * 2, dist = 16 + Math.random() * 48;
+      var tx = Math.cos(ang) * dist, ty = Math.sin(ang) * dist, rot = Math.random() * 220 - 110;
+      (function (el, tx, ty, rot) { requestAnimationFrame(function () { requestAnimationFrame(function () { el.style.transform = 'translate(-50%,-50%) translate(' + tx + 'px,' + ty + 'px) rotate(' + rot + 'deg)'; el.style.opacity = '0'; }); }); })(el, tx, ty, rot);
+      setTimeout((function (el) { return function () { el.remove(); }; })(el), dur + delay + 150);
+    }
+  }
+  Array.prototype.forEach.call(marks, function (mark) {
+    var hit = document.createElementNS(SVGNS, 'rect');
+    hit.setAttribute('x', '0'); hit.setAttribute('y', '0'); hit.setAttribute('width', '100'); hit.setAttribute('height', '100'); hit.setAttribute('fill', 'transparent');
+    mark.insertBefore(hit, mark.firstChild);
+    function clear() { for (var k = 0; k < classes.length; k++) mark.classList.remove(classes[k]); }
+    mark.addEventListener('click', function (e) {
+      if (mark.closest('a')) { e.preventDefault(); e.stopPropagation(); }
+      if (reduce) return;
+      clear(); void mark.offsetWidth;
+      var fx = order[i % order.length]; i++;
+      if (fx === 'pixels') { mark.classList.add('mk-dissolve'); pixelBurst(mark); } else { mark.classList.add('mk-' + fx); }
+    });
+    mark.addEventListener('animationend', clear);
+  });
+})();
+</script>
+<script>
+(function () {
+  var forms = document.querySelectorAll('.capture-form, .footer-form');
+  Array.prototype.forEach.call(forms, function (form) {
+    var hp = document.createElement('input');
+    hp.type = 'text'; hp.name = 'company'; hp.className = 'hp-field'; hp.tabIndex = -1; hp.autocomplete = 'off'; hp.setAttribute('aria-hidden', 'true');
+    form.appendChild(hp);
+    form.addEventListener('submit', function (e) {
+      e.preventDefault();
+      var input = form.querySelector('input[type="email"]'); var btn = form.querySelector('button');
+      if (!input) return; var email = input.value.trim(); if (!email) return;
+      var original = btn ? btn.textContent : '';
+      if (btn) { btn.disabled = true; btn.textContent = 'Sending…'; }
+      clearError(form);
+      fetch('/subscribe', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ email: email, company: hp.value }) })
+        .then(function (res) { return res.json().catch(function () { return {}; }).then(function (data) { return { ok: res.ok, data: data }; }); })
+        .then(function (r) {
+          if (r.ok && r.data && r.data.ok) { success(form, r.data.already ? "You're already on the list — thanks." : "You're on the list. Watch for the next dispatch."); }
+          else { if (btn) { btn.disabled = false; btn.textContent = original; } error(form, (r.data && r.data.error === 'invalid email') ? "That email doesn't look right." : "Hmm, that didn't go through. Try again in a moment."); }
+        })
+        .catch(function () { if (btn) { btn.disabled = false; btn.textContent = original; } error(form, "Network hiccup — try again."); });
+    });
+  });
+  function success(form, msg) { var n = document.createElement('div'); n.className = 'form-note'; n.setAttribute('role', 'status'); n.textContent = msg; form.replaceWith(n); }
+  function clearError(form) { var n = form.parentNode && form.parentNode.querySelector('.form-error'); if (n) n.remove(); }
+  function error(form, msg) { clearError(form); var n = document.createElement('div'); n.className = 'form-error'; n.setAttribute('role', 'alert'); n.textContent = msg; form.parentNode.insertBefore(n, form.nextSibling); }
+})();
+</script>
+</body>
+</html>
